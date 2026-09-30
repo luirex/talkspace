@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TALKSPACE</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F4;--ink:#23211F;--mut:#7A756E;--line:#E7E2DA;--ac:#2E5E4E;--serif:'Newsreader',Georgia,serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;background:none;border:0;padding:0}
+input,select,textarea{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.logo{font-family:var(--serif);letter-spacing:.14em;font-weight:500}
+.btn{background:var(--ink);color:#fff;border-radius:8px;padding:10px 18px;transition:background .2s}.btn:hover{background:var(--ac)}
+.ghost{color:var(--mut)}.ghost:hover{color:var(--ink)}
+.auth{min-height:100vh;display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:60px;padding:6vw;max-width:1200px;margin:auto}
+.hero h1{font:400 clamp(40px,6vw,72px)/1.05 var(--serif);margin:28px 0 20px}.hero p{color:var(--mut);max-width:34ch;font-size:18px}
+.af{display:grid;gap:12px}.tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.tabs button{padding:8px 0;color:var(--mut)}.tabs .on{color:var(--ink);border-bottom:2px solid var(--ac)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pw{position:relative}.pw button{position:absolute;right:12px;top:10px;color:var(--mut);font-size:13px}
+.chk{display:flex;gap:8px;align-items:center;color:var(--mut)}.chk input{width:auto}.msg{color:#a33;margin:0;min-height:1em;font-size:14px}.af a{color:var(--mut);font-size:14px}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.side{border-right:1px solid var(--line);padding:26px 18px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.side .logo{margin:0 8px 26px}.side button{text-align:left;padding:8px 10px;border-radius:8px;color:var(--mut)}
+.side button:hover{background:#efebe4}.side button.on{color:var(--ink);background:#ece7de}.side .sp{flex:1}
+main.c{padding:48px min(6vw,72px) 100px;max-width:960px;width:100%}
+h1.g{font:400 40px/1.1 var(--serif);margin:0}h2{font:400 22px var(--serif);margin:44px 0 12px}.sub{color:var(--mut);margin:6px 0 22px;font-size:18px}
+.stats{display:flex;gap:44px;margin-top:40px;flex-wrap:wrap}.stats b{display:block;font:400 34px var(--serif)}.stats span{color:var(--mut);font-size:13px}
+.row{display:flex;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.star{font-size:18px;color:var(--mut)}.star.on{color:var(--ac)}.rt{flex:1;min-width:0}
+.tt{font:400 19px var(--serif);text-align:left}.tt:hover{color:var(--ac)}
+.mt{display:flex;gap:14px;flex-wrap:wrap;color:var(--mut);font-size:13px;margin-top:2px}.pill{color:var(--ac)}
+.ac{display:flex;gap:12px;font-size:13px;color:var(--mut)}.ac button:hover{color:var(--ink)}.empty{color:var(--mut);padding:30px 0}
+.modal{position:fixed;inset:0;background:#23211f66;display:grid;place-items:center;padding:16px;z-index:9}
+.modal form{background:var(--bg);border-radius:14px;padding:28px;width:min(460px,100%);display:grid;gap:12px}.modal h3{font:400 24px var(--serif);margin:0}
+.bar{display:flex;gap:14px;align-items:center;margin-bottom:14px}#stitle{font:400 32px var(--serif);border:0;background:none;padding:0}
+#stitle:focus{outline:0}#ind{color:var(--mut);font-size:13px;min-width:90px;text-align:right}.bar select{width:auto}
+.tool{position:sticky;top:0;background:var(--bg);display:flex;gap:2px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--line);z-index:2}
+.tool button{padding:5px 10px;border-radius:6px;min-width:34px}.tool button:hover{background:#ece7de}
+.sec{padding:22px 0;border-bottom:1px solid var(--line)}.sec.over{background:#ece7de55}
+.sh{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--mut)}.grip{cursor:grab;padding:0 4px}
+.st{border:0;background:none;padding:2px 0;font-weight:600;color:var(--ink);flex:1}.sh button:hover{color:var(--ink)}
+.ed{font:400 19px/1.7 var(--serif);min-height:90px;padding:10px 0;outline:0}.ed blockquote{border-left:3px solid var(--ac);margin:8px 0;padding-left:16px;color:var(--mut)}
+.ed h2{font-size:26px;margin:14px 0 4px}.ed h3{font-size:21px;margin:12px 0 4px}
+.add{display:flex;gap:10px;margin-top:22px}.add select{width:auto}
+#met{position:fixed;bottom:0;left:230px;right:0;background:var(--bg);border-top:1px solid var(--line);padding:10px min(6vw,72px);color:var(--mut);font-size:13px;display:flex;gap:22px}
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;z-index:20}
+@media(max-width:760px){.auth{grid-template-columns:1fr;gap:30px}.shell{display:block}
+.side{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;overflow-x:auto;z-index:5;background:var(--bg);border-top:1px solid var(--line);border-right:0;padding:6px}
+.side .logo,.side .sp{display:none}.side button{white-space:nowrap}main.c{padding:28px 20px 130px}#met{left:0;bottom:46px}.ac{flex-wrap:wrap}}
+</style></head><body><div id="app"></div>
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,browserSessionPersistence} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {getFirestore,collection,doc,getDocs,setDoc,updateDoc,deleteDoc,query,where} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+/* ===== CONFIGURACIÓN: pega aquí el firebaseConfig de tu app web (// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDUY9eNQas93voBm9hWMxflW672H7lrCYw",
+  authDomain: "talkspace-52f14.firebaseapp.com",
+  projectId: "talkspace-52f14",
+  storageBucket: "talkspace-52f14.firebasestorage.app",
+  messagingSenderId: "617878123650",
+  appId: "1:617878123650:web:f97f86dbb7ee44c3d2f09b"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);) ===== */
+const CFG={apiKey:'TU_API_KEY',authDomain:'TU-PROYECTO.firebaseapp.com',projectId:'TU-PROYECTO',appId:'TU_APP_ID'};
+
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rem=()=>localStorage.getItem('ts_rem')!=='0';
+/* ---------- Firebase: Auth + Firestore (datos en users/{uid}/...) ---------- */
+const fapp=initializeApp(CFG),fa=getAuth(fapp),fs=getFirestore(fapp);
+const ready=new Promise(r=>{const u=onAuthStateChanged(fa,x=>{u();r(x)})});
+const uid=()=>crypto.randomUUID(),J=o=>JSON.parse(JSON.stringify(o));
+const col=t=>collection(fs,'users',fa.currentUser.uid,t);
+const AERR={'auth/invalid-credential':'Email o contraseña incorrectos','auth/wrong-password':'Email o contraseña incorrectos','auth/user-not-found':'Email o contraseña incorrectos','auth/email-already-in-use':'Ese email ya tiene una cuenta','auth/weak-password':'Usa al menos 6 caracteres','auth/invalid-email':'Email no válido','auth/too-many-requests':'Demasiados intentos. Espera un momento'};
+const aerr=e=>({message:AERR[e.code]||e.message});
+const DEF={speeches:{title:'Sin título',description:'',status:'draft',is_favorite:false,archived_at:null,deleted_at:null,category_id:null},speech_sections:{kind:'Desarrollo',title:'',content:{},word_count:0}};
+/*FS_START*/
+async function run(q){await ready;const now=new Date().toISOString(),C=col(q.t);
+ const find=async f=>(await getDocs(f.length?query(C,...f.map(([k,v])=>where(k,'==',v))):C)).docs;
+ let out;
+ if(q.op==='insert'||q.op==='upsert'){out=[];for(const r0 of [].concat(q.row)){const r=J(r0);
+  if(q.op==='upsert'){const ex=await find(q.conf.split(',').filter(k=>k!=='user_id').map(k=>[k,r[k]]));if(ex[0]){await updateDoc(ex[0].ref,r);out.push({...ex[0].data(),...r});continue}}
+  const id=uid(),n={id,created_at:now,updated_at:now,...DEF[q.t],...r};await setDoc(doc(C,id),n);out.push(n)}}
+ else if(q.op==='update'){out=[];for(const d of await find(q.f)){const p={...J(q.row),updated_at:now};await updateDoc(d.ref,p);out.push({...d.data(),...p})}}
+ else if(q.op==='delete'){out=[];for(const d of await find(q.f)){out.push(d.data());
+  if(q.t==='speeches')for(const t of ['speech_sections','speech_tags'])for(const x of (await getDocs(query(col(t),where('speech_id','==',d.id)))).docs)await deleteDoc(x.ref);
+  await deleteDoc(d.ref)}}
+ else{out=(await find(q.f)).map(d=>d.data());
+  if(q.ord)out.sort((a,b)=>(a[q.ord[0]]>b[q.ord[0]]?1:-1)*(q.ord[1]?1:-1));
+  if(q.t==='speeches'&&q.sel.includes('categories')){const cs=(await getDocs(col('categories'))).docs.map(d=>d.data()),ss=(await getDocs(col('speech_sections'))).docs.map(d=>d.data());
+   out=out.map(r=>({...r,categories:cs.find(c=>c.id===r.category_id)||null,speech_sections:ss.filter(x=>x.speech_id===r.id).map(x=>({word_count:x.word_count||0}))}))}}
+ if(q.one)return out[0]?{data:out[0],error:null}:{data:null,error:{message:'No encontrado'}};
+ return{data:out,error:null}}
+/*FS_END*/
+const sb={from(t){const q={t,op:'select',f:[],ord:null,row:null,one:false,conf:null,sel:''},a={
+ select(s){q.sel=s||q.sel;return a},eq(k,v){q.f.push([k,v]);return a},order(k,o){q.ord=[k,o?.ascending!==false];return a},single(){q.one=true;return a},
+ insert(r){q.op='insert';q.row=r;return a},update(r){q.op='update';q.row=r;return a},upsert(r,o){q.op='upsert';q.row=r;q.conf=o.onConflict;return a},delete(){q.op='delete';return a},
+ then(ok){run(q).catch(e=>({data:null,error:{message:e.message}})).then(ok)}};return a},
+ auth:{
+  async getUser(){await ready;const c=fa.currentUser;return{data:{user:c?{id:c.uid,email:c.email}:null}}},
+  async signInWithPassword({email,password}){try{await setPersistence(fa,rem()?browserLocalPersistence:browserSessionPersistence);await signInWithEmailAndPassword(fa,email,password);return{error:null}}catch(e){return{error:aerr(e)}}},
+  async signUp({email,password,options}){try{await setPersistence(fa,browserLocalPersistence);const {user}=await createUserWithEmailAndPassword(fa,email,password),n=new Date().toISOString(),m=options?.data||{};
+   await setDoc(doc(fs,'users',user.uid,'profiles',user.uid),{id:user.uid,first_name:m.first_name||'',last_name:m.last_name||'',created_at:n,updated_at:n});return{data:{session:{}},error:null}}catch(e){return{data:null,error:aerr(e)}}},
+  async resetPasswordForEmail(email){try{await sendPasswordResetEmail(fa,email);return{error:null}}catch(e){return{error:aerr(e)}}},
+  async updateUser(){return{error:{message:'No disponible'}}},
+  async signOut(){await signOut(fa)},
+  onAuthStateChange(){}}};
+const app=$('#app');
+let S={user:null,prof:null,view:'home',list:[],cur:null,secs:[],mode:'login',q:'',drag:null};
+const KINDS=['Apertura','Introducción','Idea principal','Desarrollo','Historia / ejemplo','Punto clave','Conclusión','Llamado a la acción'];
+const STAT={draft:'Borrador',preparing:'En preparación',ready:'Listo'};
+const words=t=>(t.trim().match(/\S+/g)||[]).length;
+const dur=w=>{const s=Math.round(w/130*60);return Math.floor(s/60)+' min '+String(s%60).padStart(2,'0')+' s'};
+const ago=d=>new Date(d).toLocaleDateString('es',{day:'numeric',month:'short',year:'numeric'});
+const clean=h=>{const t=document.createElement('template');t.innerHTML=h;
+ t.content.querySelectorAll('script,iframe,object,embed,style,link').forEach(e=>e.remove());
+ t.content.querySelectorAll('*').forEach(e=>[...e.attributes].forEach(a=>/^on|^style$/i.test(a.name)&&e.removeAttribute(a.name)));return t.innerHTML};
+const toast=m=>{const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.append(d);setTimeout(()=>d.remove(),3000)};
+const say=t=>{const m=$('.msg');if(m)m.textContent=t};
+const ind=t=>{const i=$('#ind');if(i)i.textContent=t};
+
+/* ---------- AUTH ---------- */
+function auth(){const m=S.mode,reg=m==='register';
+app.innerHTML=`<main class="auth"><section class="hero"><b class="logo">TALKSPACE</b>
+<h1>Tus ideas. Tu voz. Tus discursos.</h1><p>Un espacio inteligente para escribir, organizar y preparar todo lo que quieres decir.</p></section>
+<form id="af" class="af" novalidate>
+${m==='newpw'?'<h3 style="margin:0">Elige una nueva contraseña</h3>':`<div class="tabs"><button type="button" data-a="mode" data-m="login" class="${m==='login'?'on':''}">Iniciar sesión</button><button type="button" data-a="mode" data-m="register" class="${reg?'on':''}">Crear cuenta</button></div>`}
+${reg?'<div class="two"><input name="fn" placeholder="Nombre" required><input name="ln" placeholder="Apellido" required></div>':''}
+${m!=='newpw'?'<input name="email" type="email" placeholder="Email" autocomplete="email" required>':''}
+${m!=='reset'?'<div class="pw"><input name="pw" type="password" placeholder="Contraseña" required><button type="button" data-a="eye">Mostrar</button></div>':''}
+${reg||m==='newpw'?'<input name="pw2" type="password" placeholder="Confirmar contraseña" required>':''}
+${m==='login'?`<label class="chk"><input type="checkbox" name="rem" ${rem()?'checked':''}> Recordar sesión</label>`:''}
+<p class="msg">${CFG.projectId==='TU-PROYECTO'?'Falta configurar CFG con los datos de tu proyecto de Firebase.':''}</p>
+<button class="btn">${{login:'Iniciar sesión',register:'Crear cuenta',reset:'Enviar enlace',newpw:'Guardar contraseña'}[m]}</button>
+${m==='login'?'<a href="#" data-a="mode" data-m="reset">Recuperar contraseña</a>':m==='reset'?'<a href="#" data-a="mode" data-m="login">Volver</a>':''}
+</form></main>`}
+
+async function boot(){
+ const {data:{user}}=await sb.auth.getUser();if(!user)return auth();
+ S.user=user;const {data}=await sb.from('profiles').select('*').eq('id',user.id).single();S.prof=data||{first_name:'',last_name:''};
+ await load();S.view='home';render()}
+async function load(){
+ const {data,error}=await sb.from('speeches').select('*,categories(name),speech_sections(word_count)').order('updated_at',{ascending:false});
+ if(error)return toast('No se pudieron cargar los discursos');
+ S.list=(data||[]).map(s=>({...s,w:(s.speech_sections||[]).reduce((a,x)=>a+x.word_count,0)}))}
+
+/* ---------- VISTAS ---------- */
+const act=s=>!s.archived_at&&!s.deleted_at;
+const NAV=[['home','Inicio'],['all','Mis discursos'],['fav','Favoritos'],['arch','Archivados'],['trash','Papelera'],['prof','Mi perfil']];
+function row(s){const b=s.deleted_at?'<button data-a="rest">Restaurar</button><button data-a="del">Eliminar definitivamente</button>'
+ :s.archived_at?'<button data-a="arch">Restaurar</button><button data-a="del">Eliminar</button>'
+ :'<button data-a="dup">Duplicar</button><button data-a="arch">Archivar</button><button data-a="del">Eliminar</button>';
+ return `<div class="row" data-id="${s.id}"><button class="star ${s.is_favorite?'on':''}" data-a="fav" aria-label="Favorito">${s.is_favorite?'★':'☆'}</button>
+<div class="rt"><button class="tt" data-a="open">${esc(s.title)}</button><div class="mt"><span>${esc(s.categories?.name||'Sin categoría')}</span><span>${ago(s.updated_at)}</span><span>${s.w.toLocaleString('es')} palabras</span><span>${dur(s.w)}</span><span class="pill">${STAT[s.status]}</span></div></div><div class="ac">${b}</div></div>`}
+const rows=(l)=>l.length?l.map(row).join(''):'<p class="empty">Aquí aún no hay discursos.</p>';
+const FIL={all:act,fav:s=>act(s)&&s.is_favorite,arch:s=>s.archived_at&&!s.deleted_at,trash:s=>s.deleted_at};
+const TIT={all:'Mis discursos',fav:'Favoritos',arch:'Archivados',trash:'Papelera'};
+function home(){const a=S.list.filter(act),h=new Date().getHours(),g=h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches';
+ const n=(f)=>S.list.filter(f).length;
+ return `<h1 class="g">${g}, ${esc(S.prof.first_name||'')}</h1><p class="sub">¿Qué quieres decir hoy?</p><button class="btn" data-a="new">+ Nuevo discurso</button>
+<div class="stats"><div><b>${a.length}</b><span>Mis discursos</span></div><div><b>${a.filter(s=>s.status==='preparing').length}</b><span>En preparación</span></div>
+<div><b>${n(FIL.fav)}</b><span>Favoritos</span></div><div><b>${n(FIL.arch)}</b><span>Archivados</span></div></div>
+<h2>Continuar trabajando</h2>${rows(a.slice(0,5))}`}
+function listView(){const f=S.list.filter(FIL[S.view]);
+ return `<h1 class="g">${TIT[S.view]}</h1><div style="margin:20px 0"><input id="q" placeholder="Buscar por título" value="${esc(S.q)}"></div><div id="rows">${rows(f.filter(s=>s.title.toLowerCase().includes(S.q.toLowerCase())))}</div>`}
+function prof(){return `<h1 class="g">Mi perfil</h1><form id="pf" class="af" style="max-width:380px;margin-top:24px"><input name="fn" placeholder="Nombre" value="${esc(S.prof.first_name)}"><input name="ln" placeholder="Apellido" value="${esc(S.prof.last_name)}"><input value="${esc(S.user.email)}" disabled><button class="btn">Guardar cambios</button></form>`}
+function secHtml(x){return `<article class="sec" data-id="${x.id}"><div class="sh"><span class="grip" draggable="true" data-a="grip" title="Arrastrar">⋮⋮</span><input class="st" value="${esc(x.title)}" aria-label="Título de sección">
+<button data-a="sup" title="Subir">↑</button><button data-a="sdown" title="Bajar">↓</button><button data-a="sdup">Duplicar</button><button data-a="sdel">Eliminar</button></div>
+<div class="ed" contenteditable="true" data-ph="Escribe aquí">${clean(x.content?.html||'')}</div></article>`}
+function edit(){const s=S.cur;
+ return `<div class="bar"><button class="ghost" data-a="nav" data-v="all">← Volver</button><span style="flex:1"></span><select id="sstat">${Object.entries(STAT).map(([k,v])=>`<option value="${k}" ${s.status===k?'selected':''}>${v}</option>`).join('')}</select><span id="ind"></span></div>
+<input id="stitle" value="${esc(s.title)}" aria-label="Título">
+<div class="tool">${[['bold','<b>N</b>'],['italic','<i>C</i>'],['underline','<u>S</u>'],['h2','Título'],['h3','Subtítulo'],['ul','Lista'],['quote','Cita'],['hr','Separador'],['undo','Deshacer'],['redo','Rehacer']].map(([c,l])=>`<button data-c="${c}">${l}</button>`).join('')}</div>
+<div id="secs">${S.secs.map(secHtml).join('')}</div>
+<div class="add"><select id="kind">${KINDS.map(k=>`<option>${k}</option>`).join('')}</select><button class="btn" data-a="sadd">+ Añadir sección</button></div>
+<div id="met"></div>`}
+function render(){
+ if(!S.user)return auth();
+ const body=S.view==='home'?home():S.view==='prof'?prof():S.view==='edit'?edit():listView();
+ app.innerHTML=`<div class="shell"><nav class="side"><b class="logo">TALKSPACE</b>${NAV.map(([v,l])=>`<button data-a="nav" data-v="${v}" class="${S.view===v||(S.view==='edit'&&v==='all')?'on':''}">${l}</button>`).join('')}<span class="sp"></span><button data-a="out">Cerrar sesión</button></nav><main class="c">${body}</main></div>`;
+ if(S.view==='edit')metrics()}
+function metrics(){const w=$$('.ed').reduce((a,e)=>a+words(e.textContent),0);
+ $('#met').innerHTML=`<span>${w.toLocaleString('es')} palabras</span><span>${dur(w)}</span><span>${$$('.sec').length} secciones</span>`}
+
+/* ---------- GUARDADO AUTOMÁTICO ---------- */
+const dirty=new Set();let tm;
+function mark(id){dirty.add(id);ind('Guardando...');clearTimeout(tm);tm=setTimeout(flush,900)}
+async function flush(){clearTimeout(tm);const ids=[...dirty];dirty.clear();if(!ids.length||!S.cur)return;
+ try{for(const id of ids){
+  if(id==='title'){const {error}=await sb.from('speeches').update({title:$('#stitle').value.trim()||'Sin título'}).eq('id',S.cur.id);if(error)throw error}
+  else{const el=$(`.sec[data-id="${id}"]`);if(!el)continue;const ed=$('.ed',el);
+   const {error}=await sb.from('speech_sections').update({title:$('.st',el).value,content:{html:clean(ed.innerHTML)},word_count:words(ed.textContent)}).eq('id',id);if(error)throw error}}
+  await sb.from('speeches').update({updated_at:new Date().toISOString()}).eq('id',S.cur.id);ind('Guardado ✓')}
+ catch(e){ids.forEach(i=>dirty.add(i));ind('Error al guardar')}}
+addEventListener('beforeunload',e=>{if(dirty.size){flush();e.preventDefault()}});
+
+/* ---------- DATOS ---------- */
+async function loadSecs(){const {data}=await sb.from('speech_sections').select('*').eq('speech_id',S.cur.id).order('position');S.secs=data||[]}
+async function openSp(id){S.cur=S.list.find(x=>x.id===id);await loadSecs();S.view='edit';render()}
+const order=()=>$$('.sec').map(e=>e.dataset.id);
+async function persist(ids){await Promise.all(ids.map((id,i)=>sb.from('speech_sections').update({position:i}).eq('id',id)));await loadSecs();render()}
+async function upsertName(t,n){n=n.trim();if(!n)return null;const {data,error}=await sb.from(t).upsert({name:n},{onConflict:'user_id,name'}).select().single();if(error)throw error;return data.id}
+async function dup(id){const s=S.list.find(x=>x.id===id);
+ const {data:n,error}=await sb.from('speeches').insert({title:s.title+' (copia)',description:s.description,category_id:s.category_id,status:'draft'}).select().single();if(error)throw error;
+ const {data:ss}=await sb.from('speech_sections').select('*').eq('speech_id',id);
+ if(ss?.length)await sb.from('speech_sections').insert(ss.map(({id,created_at,updated_at,user_id,...r})=>({...r,speech_id:n.id})))}
+function modal(){document.body.insertAdjacentHTML('beforeend',`<div class="modal"><form id="nf"><h3>Nuevo discurso</h3><input name="t" placeholder="Título" required autofocus><input name="c" placeholder="Categoría (ej. Boda, Trabajo)"><textarea name="d" rows="2" placeholder="Descripción"></textarea><input name="g" placeholder="Etiquetas separadas por coma"><div style="display:flex;gap:10px;justify-content:flex-end"><button type="button" class="ghost" data-a="close">Cancelar</button><button class="btn">Crear y abrir editor</button></div></form></div>`)}
+
+/* ---------- EVENTOS ---------- */
+document.addEventListener('click',async e=>{
+ const t=e.target.closest('[data-c]');
+ if(t){const c=t.dataset.c,x=document.execCommand.bind(document);
+  const m={bold:['bold'],italic:['italic'],underline:['underline'],h2:['formatBlock','<h2>'],h3:['formatBlock','<h3>'],ul:['insertUnorderedList'],quote:['formatBlock','<blockquote>'],hr:['insertHorizontalRule'],undo:['undo'],redo:['redo']}[c];
+  x(m[0],false,m[1]);const ed=document.activeElement?.closest?.('.ed');if(ed){mark(ed.closest('.sec').dataset.id);metrics()}return}
+ const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,id=b.closest('[data-id]')?.dataset.id;
+ try{switch(a){
+ case'mode':e.preventDefault();S.mode=b.dataset.m;auth();break;
+ case'eye':{const i=$('input[name=pw]');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'Mostrar':'Ocultar';break}
+ case'nav':await flush();S.view=b.dataset.v;S.cur=null;await load();render();break;
+ case'out':await flush();await sb.auth.signOut();S.user=null;S.mode='login';auth();break;
+ case'new':modal();break;case'close':$('.modal').remove();break;
+ case'open':await openSp(id);break;
+ case'fav':{const s=S.list.find(x=>x.id===id);await sb.from('speeches').update({is_favorite:!s.is_favorite}).eq('id',id);await load();render();break}
+ case'arch':{const s=S.list.find(x=>x.id===id);await sb.from('speeches').update({archived_at:s.archived_at?null:new Date().toISOString()}).eq('id',id);await load();render();break}
+ case'rest':await sb.from('speeches').update({deleted_at:null}).eq('id',id);await load();render();break;
+ case'del':{const s=S.list.find(x=>x.id===id);
+  if(s.deleted_at||s.archived_at&&false){if(!confirm('¿Eliminar definitivamente? No se puede deshacer.'))break;await sb.from('speeches').delete().eq('id',id)}
+  else await sb.from('speeches').update({deleted_at:new Date().toISOString()}).eq('id',id);
+  await load();render();if(!s.deleted_at)toast('Movido a la papelera');break}
+ case'dup':await dup(id);await load();render();toast('Discurso duplicado');break;
+ case'sadd':{await flush();const k=$('#kind').value;await sb.from('speech_sections').insert({speech_id:S.cur.id,kind:k,title:k,position:S.secs.length});await loadSecs();render();break}
+ case'sdup':{await flush();const x=S.secs.find(s=>s.id===id);
+  const {data:n}=await sb.from('speech_sections').insert({speech_id:S.cur.id,kind:x.kind,title:x.title,content:x.content,word_count:x.word_count,position:S.secs.length}).select().single();
+  const ids=order();ids.splice(ids.indexOf(id)+1,0,n.id);await persist(ids);break}
+ case'sdel':if(!confirm('¿Eliminar esta sección?'))break;await flush();await sb.from('speech_sections').delete().eq('id',id);await persist(order().filter(i=>i!==id));break;
+ case'sup':case'sdown':{await flush();const ids=order(),i=ids.indexOf(id),j=a==='sup'?i-1:i+1;if(j<0||j>=ids.length)break;[ids[i],ids[j]]=[ids[j],ids[i]];await persist(ids);break}
+ }}catch(err){toast('Error: '+(err.message||err))}});
+/* evita perder la selección al pulsar la barra */
+document.addEventListener('mousedown',e=>{if(e.target.closest('[data-c]'))e.preventDefault()});
+
+document.addEventListener('input',e=>{const t=e.target;
+ if(t.closest?.('.ed')){mark(t.closest('.sec').dataset.id);metrics()}
+ else if(t.classList?.contains('st'))mark(t.closest('.sec').dataset.id);
+ else if(t.id==='stitle')mark('title');
+ else if(t.id==='q'){S.q=t.value;$('#rows').innerHTML=rows(S.list.filter(FIL[S.view]).filter(s=>s.title.toLowerCase().includes(S.q.toLowerCase())))}});
+document.addEventListener('change',async e=>{if(e.target.id==='sstat'){await sb.from('speeches').update({status:e.target.value}).eq('id',S.cur.id);S.cur.status=e.target.value;ind('Guardado ✓')}});
+
+/* drag & drop de secciones */
+document.addEventListener('dragstart',e=>{const g=e.target.closest?.('.grip');if(!g)return;const s=g.closest('.sec');S.drag=s.dataset.id;e.dataTransfer.setData('text/plain',S.drag);e.dataTransfer.setDragImage(s,0,0)});
+document.addEventListener('dragover',e=>{const s=e.target.closest?.('.sec');if(s&&S.drag){e.preventDefault();$$('.sec').forEach(x=>x.classList.toggle('over',x===s))}});
+document.addEventListener('drop',async e=>{const s=e.target.closest?.('.sec');if(!s||!S.drag)return;e.preventDefault();
+ await flush();const ids=order().filter(i=>i!==S.drag);ids.splice(ids.indexOf(s.dataset.id)+(order().indexOf(S.drag)<order().indexOf(s.dataset.id)?1:0),0,S.drag);S.drag=null;await persist(ids)});
+
+document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f));
+ try{
+ if(f.id==='af'){const m=S.mode;
+  if(m!=='newpw'&&!/^\S+@\S+\.\S+$/.test(d.email||''))return say('Escribe un email válido');
+  if(m!=='reset'&&!d.pw)return say('La contraseña es obligatoria');
+  if((m==='register'||m==='newpw')&&d.pw!==d.pw2)return say('Las contraseñas no coinciden');
+  if((m==='register'||m==='newpw')&&d.pw.length<6)return say('Usa al menos 6 caracteres');
+  if(m==='login'){localStorage.setItem('ts_rem',d.rem?'1':'0');const {error}=await sb.auth.signInWithPassword({email:d.email,password:d.pw});if(error)return say('Email o contraseña incorrectos');await boot()}
+  else if(m==='register'){localStorage.setItem('ts_rem','1');const {data,error}=await sb.auth.signUp({email:d.email,password:d.pw,options:{data:{first_name:d.fn?.trim(),last_name:d.ln?.trim()}}});
+   if(error)return say(error.message);data.session?await boot():say('Revisa tu correo para confirmar la cuenta.')}
+  else if(m==='reset'){const {error}=await sb.auth.resetPasswordForEmail(d.email,{redirectTo:location.href.split('#')[0]});say(error?error.message:'Te enviamos un enlace para restablecerla.')}
+  else{const {error}=await sb.auth.updateUser({password:d.pw});if(error)return say(error.message);S.mode='login';await boot()}}
+ else if(f.id==='pf'){const {error}=await sb.from('profiles').update({first_name:d.fn.trim(),last_name:d.ln.trim()}).eq('id',S.user.id);if(error)throw error;S.prof={...S.prof,first_name:d.fn.trim(),last_name:d.ln.trim()};toast('Perfil actualizado')}
+ else if(f.id==='nf'){const cid=await upsertName('categories',d.c);
+  const {data:n,error}=await sb.from('speeches').insert({title:d.t.trim(),description:d.d.trim(),category_id:cid,status:'preparing'}).select().single();if(error)throw error;
+  for(const g of d.g.split(',')){const tid=await upsertName('tags',g);if(tid)await sb.from('speech_tags').insert({speech_id:n.id,tag_id:tid})}
+  await sb.from('speech_sections').insert({speech_id:n.id,kind:'Apertura',title:'Apertura',position:0});
+  $('.modal').remove();await load();await openSp(n.id)}
+ }catch(err){toast('Error: '+(err.message||err))}});
+
+sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY'){S.mode='newpw';auth()}});
+boot();
+</script></body></html>
