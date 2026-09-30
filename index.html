@@ -52,24 +52,15 @@ h1.g{font:400 40px/1.1 var(--serif);margin:0}h2{font:400 22px var(--serif);margi
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,browserSessionPersistence} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {getFirestore,collection,doc,getDocs,setDoc,updateDoc,deleteDoc,query,where} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-/* ===== CONFIGURACIÓN: pega aquí el firebaseConfig de tu app web (// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDUY9eNQas93voBm9hWMxflW672H7lrCYw",
-  authDomain: "talkspace-52f14.firebaseapp.com",
-  projectId: "talkspace-52f14",
-  storageBucket: "talkspace-52f14.firebasestorage.app",
-  messagingSenderId: "617878123650",
-  appId: "1:617878123650:web:f97f86dbb7ee44c3d2f09b"
+/* ===== CONFIGURACIÓN: pega aquí el firebaseConfig de tu app web (Configuración del proyecto > Tus apps) ===== */
+const CFG={
+  apiKey:"AIzaSyDUY9eNQas93voBm9hWMxflW672H7lrCYw",
+  authDomain:"talkspace-52f14.firebaseapp.com",
+  projectId:"talkspace-52f14",
+  storageBucket:"talkspace-52f14.firebasestorage.app",
+  messagingSenderId:"617878123650",
+  appId:"1:617878123650:web:f97f86dbb7ee44c3d2f09b"
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);) ===== */
-const CFG={apiKey:'TU_API_KEY',authDomain:'TU-PROYECTO.firebaseapp.com',projectId:'TU-PROYECTO',appId:'TU_APP_ID'};
 
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
