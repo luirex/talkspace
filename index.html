@@ -11,11 +11,11 @@
 <style>
 /* ============ TEMAS ============ */
 :root{--ease:cubic-bezier(.2,.7,.2,1);--r:14px}
-[data-theme=dark]{--bg:#0c0c0f;--bg2:#121217;--card:#17171e;--card2:#1e1e27;--line:rgba(255,255,255,.08);--text:#ece8df;--muted:#9b978d;--gold:#d6b26e;--gold-i:#1a1407;--danger:#e5636b;--ok:#6fcf97;--sh:0 12px 34px rgba(0,0,0,.5);--glow:radial-gradient(900px 520px at 85% -10%,rgba(214,178,110,.13),transparent 60%),radial-gradient(700px 400px at -10% 110%,rgba(214,178,110,.06),transparent 60%)}
-[data-theme=light]{--bg:#f6f3ec;--bg2:#fbfaf6;--card:#ffffff;--card2:#f1ede4;--line:rgba(30,25,15,.1);--text:#1d1b17;--muted:#6d685d;--gold:#9a6f1f;--gold-i:#ffffff;--danger:#c4414a;--ok:#2e8b57;--sh:0 12px 34px rgba(60,45,10,.12);--glow:radial-gradient(900px 520px at 85% -10%,rgba(176,130,40,.14),transparent 60%)}
+[data-theme=dark]{color-scheme:dark;--bg:#0c0c0f;--bg2:#121217;--card:#17171e;--card2:#1e1e27;--line:rgba(255,255,255,.08);--text:#ece8df;--muted:#9b978d;--gold:#d6b26e;--gold-i:#1a1407;--danger:#e5636b;--ok:#6fcf97;--sh:0 12px 34px rgba(0,0,0,.5);--glow:radial-gradient(900px 520px at 85% -10%,rgba(214,178,110,.13),transparent 60%),radial-gradient(700px 400px at -10% 110%,rgba(214,178,110,.06),transparent 60%)}
+[data-theme=light]{color-scheme:light;--bg:#f6f3ec;--bg2:#fbfaf6;--card:#ffffff;--card2:#f1ede4;--line:rgba(30,25,15,.1);--text:#1d1b17;--muted:#6d685d;--gold:#9a6f1f;--gold-i:#ffffff;--danger:#c4414a;--ok:#2e8b57;--sh:0 12px 34px rgba(60,45,10,.12);--glow:radial-gradient(900px 520px at 85% -10%,rgba(176,130,40,.14),transparent 60%)}
 *{box-sizing:border-box;margin:0}
-html{-webkit-text-size-adjust:100%}
-body{font:15px/1.55 Inter,system-ui,sans-serif;background:var(--bg) var(--glow) fixed;color:var(--text);min-height:100vh;transition:background-color .3s,color .3s}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{font:15px/1.55 Inter,system-ui,sans-serif;background-color:var(--bg);background-image:var(--glow);background-attachment:fixed;color:var(--text);min-height:100vh;transition:background-color .3s,color .3s}
 .serif{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:.2px}
 .muted{color:var(--muted)}.sm{font-size:13px}.grow{flex:1}.hide{display:none!important}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
@@ -142,6 +142,28 @@ select.f{padding:10px 14px;border-radius:12px;border:1px solid var(--line);backg
 .rt input{width:54px;padding:5px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;margin:0;font-size:13px}
 .reader.idle .r-ctrl{opacity:0;pointer-events:none}.reader.idle{cursor:none}
 
+/* ============ REFERENCIAS / EXTRAS ============ */
+.ed-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.ed-meta label{margin:0;font-size:12px}.ed-meta input{width:auto;min-width:160px;padding:8px 12px;font-size:14px}
+sup.fn{color:var(--gold);font:600 .65em Inter,sans-serif;padding:0 2px;user-select:none}
+.refs{margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}
+.refs h4{display:flex;align-items:center;gap:10px;font:600 20px 'Playfair Display',serif;margin-bottom:14px}
+.refs h4 .sm{font:400 12px Inter,sans-serif;padding:2px 9px;border-radius:999px;background:var(--card2)}
+.refs ol{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}
+.ref{display:flex;align-items:center;gap:10px}.ref b{color:var(--gold);min-width:26px;font-size:13px}
+.ref input{flex:1;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--text);font-size:14px}
+.ref input:focus{outline:0;border-color:var(--gold)}
+.due{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:999px;color:var(--ok);background:color-mix(in srgb,var(--ok) 13%,transparent)}
+.due svg{width:12px;height:12px}.due.soon{color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,transparent)}.due.past{color:var(--muted);background:var(--card2)}
+.r-refs{margin-top:3em;padding-top:1.2em;border-top:1px solid rgba(255,255,255,.2);font-size:.6em;line-height:1.6;color:#b9b4a8}
+.r-refs h2{font-size:1.5em;margin:0 0 .6em}
+.pr-refs{margin-top:2em;padding-top:1em;border-top:1px solid #888;font-size:11pt}.pr-refs h2{font:600 15pt 'Playfair Display',serif;margin-bottom:.5em}
+#print sup.fn{color:#000}
+.opts{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:-2px 0 16px;font-size:13px}
+label.chk{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer;color:var(--muted)}
+.chk input{width:16px;height:16px;margin:0;padding:0;accent-color:var(--gold)}
+.lnk{color:var(--gold);font-size:13px}.lnk:hover{text-decoration:underline}
+
 /* ============ IMPRESIÓN ============ */
 #print{display:none}
 @media print{body.printing>*:not(#print){display:none!important}body.printing #print{display:block;color:#000;background:#fff;font:13pt/1.7 Lora,Georgia,serif}#print h1{font:700 26pt 'Playfair Display',serif;margin-bottom:.6em}body.printing{background:#fff}}
@@ -155,7 +177,7 @@ select.f{padding:10px 14px;border-radius:12px;border:1px solid var(--line);backg
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, orderBy, onSnapshot, serverTimestamp, writeBatch, getDocs, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, orderBy, onSnapshot, serverTimestamp, writeBatch, getDocs, getCountFromServer, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ====================== 1. CONFIGURACIÓN FIREBASE ======================
    Pega aquí los datos de tu proyecto (Firebase Console → Configuración → Tus apps → Web) */
@@ -187,11 +209,12 @@ const ic = {
   key: svg('<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>'), mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'),
   power: svg('<path d="M12 3v9M6.3 6.3a8 8 0 1011.4 0"/>'), download: svg('<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>'),
   x: svg('<path d="M6 6l12 12M18 6L6 18"/>'), mirror: svg('<path d="M12 3v18M8 7L3 12l5 5zM16 7l5 5-5 5z"/>'), restart: svg('<path d="M4 12a8 8 0 108-8M4 4v5h5"/>'),
-  line: svg('<path d="M3 12h18M3 6l3 0M3 18l3 0"/>')
+  line: svg('<path d="M3 12h18M3 6l3 0M3 18l3 0"/>'),
+  cal: svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>')
 };
 const words = t => (t.trim().match(/\S+/g) || []).length;
 const mins = w => Math.max(1, Math.round(w / 130));
-const htmlToText = h => { const d = document.createElement('div'); d.innerHTML = String(h || '').replace(/<\/(p|div|h[1-6]|li|blockquote)>/gi, '\n').replace(/<br\s*\/?>/gi, '\n'); return (d.textContent || '').trim(); };
+const htmlToText = (h, fn) => { const d = document.createElement('div'); d.innerHTML = String(h || '').replace(/<\/(p|div|h[1-6]|li|blockquote)>/gi, '\n').replace(/<br\s*\/?>/gi, '\n'); d.querySelectorAll('sup.fn').forEach(n => fn ? n.replaceWith('[' + n.textContent + ']') : n.remove()); return (d.textContent || '').replace(/​/g, '').trim(); };
 function sanitize(h) {
   const d = new DOMParser().parseFromString('<body>' + (h || ''), 'text/html');
   d.querySelectorAll('script,style,iframe,object,embed,link,meta').forEach(n => n.remove());
@@ -201,6 +224,9 @@ function sanitize(h) {
 const toEmail = v => { v = v.trim().toLowerCase(); return v.includes('@') ? v : v.replace(/[^a-z0-9._-]/g, '') + DOMAIN; };
 const fmtDate = d => (d?.toDate ? d.toDate() : d instanceof Date ? d : new Date()).toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' });
 const fmtTime = s => { s = Math.floor(s); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+const refsHtml = (r, cls) => { const l = (r || []).map((t, i) => t && t.trim() ? `<p><b>${i + 1}.</b> ${esc(t)}</p>` : '').join(''); return l ? `<section class="${cls}"><h2>Referencias</h2>${l}</section>` : ''; };
+const refsTxt = r => { const l = (r || []).map((t, i) => t && t.trim() ? `${i + 1}. ${t.trim()}` : '').filter(Boolean); return l.length ? `\n\nReferencias\n${l.join('\n')}` : ''; };
+const dueBadge = s => { if (!s.fecha) return ''; const d = Math.round((new Date(s.fecha + 'T00:00:00') - new Date().setHours(0, 0, 0, 0)) / 864e5); const t = d < 0 ? `Fue hace ${-d} d` : d === 0 ? 'Es hoy' : d === 1 ? 'Mañana' : `En ${d} días`; return `<span class="due ${d < 0 ? 'past' : d <= 3 ? 'soon' : ''}">${ic.cal} ${t}</span>`; };
 const authMsg = c => ({
   'auth/invalid-credential': 'Usuario o contraseña incorrectos.', 'auth/user-not-found': 'Usuario o contraseña incorrectos.', 'auth/wrong-password': 'Usuario o contraseña incorrectos.',
   'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde.', 'auth/email-already-in-use': 'Ese usuario o correo ya existe (aunque se haya eliminado antes, su acceso sigue registrado). Usa otro nombre.',
@@ -244,16 +270,33 @@ const authShell = inner => `<div class="auth"><div class="auth-card"><div class=
 function showNotConfigured() {
   $('#root').innerHTML = authShell(`<h1 class="serif">Elocuencia</h1><div class="notice">Falta conectar Firebase. Abre <b>index.html</b>, pega tu <b>firebaseConfig</b> en la sección 1 del script y recarga. Sigue los pasos del archivo <b>LEEME.md</b>.</div>`);
 }
+function recoverModal() {
+  const lu = ($('#lu')?.value || '').trim();
+  const m = modal(`<h3>Recuperar contraseña</h3><p class="muted">Escribe el correo con el que ingresas y te enviaremos un enlace para crear una nueva contraseña.</p>
+  <form id="rf"><label>Correo<input type="email" id="re" autocomplete="email" required value="${esc(lu.includes('@') ? lu : '')}"></label><div class="err" id="rerr"></div>
+  <div class="actions"><button type="button" class="btn ghost" data-c>Cancelar</button><button class="btn gold">Enviar enlace</button></div></form>
+  <p class="muted sm" style="margin:14px 0 0">Si tu cuenta es solo de usuario (sin correo real), pide ayuda a tu administrador.</p>`);
+  m.querySelector('[data-c]').onclick = m.close;
+  m.querySelector('#rf').onsubmit = async e => {
+    e.preventDefault(); const b = e.target.querySelector('.gold'), mail = $('#re', m).value.trim().toLowerCase(); b.disabled = true;
+    if (mail.endsWith(DOMAIN)) { $('#rerr', m).textContent = 'Esa cuenta no tiene correo real. Pide ayuda a tu administrador.'; b.disabled = false; return; }
+    try { await sendPasswordResetEmail(auth, mail); m.close(); toast('Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.'); }
+    catch (er) { $('#rerr', m).textContent = er.code === 'auth/invalid-email' ? 'Correo no válido.' : authMsg(er.code); b.disabled = false; }
+  };
+}
 async function showLogin() {
   let init = true;
   try { init = (await getDoc(doc(db, 'config', 'setup'))).exists(); } catch (e) { }
   if (!init) return showSetup();
   $('#root').innerHTML = authShell(`<h1 class="serif">Elocuencia</h1><p class="muted">Escribe, ensaya y pronuncia tus discursos.</p>
   <form id="lf"><label>Usuario o correo<input id="lu" autocomplete="username" required autofocus></label>
-  <label>Contraseña<div class="pw"><input id="lp" type="password" autocomplete="current-password" required>${eye}</div></label>
+  <label>Contraseña<input id="lp" type="password" autocomplete="current-password" required></label>
+  <div class="opts"><label class="chk"><input type="checkbox" id="sh"> Mostrar contraseña</label><button type="button" class="lnk" id="fp">¿Olvidaste tu contraseña?</button></div>
   <div class="err" id="le"></div><button class="btn gold block" id="lb">Ingresar</button></form>
   <p class="muted sm" style="margin:18px 0 0;text-align:center">¿Sin cuenta? Pídela a tu administrador.</p>`);
   bindEyes($('#root'));
+  $('#sh').onchange = e => { $('#lp').type = e.target.checked ? 'text' : 'password'; };
+  $('#fp').onclick = recoverModal;
   $('#lf').onsubmit = async e => {
     e.preventDefault(); const b = $('#lb'); b.disabled = true; $('#le').textContent = '';
     try { await signInWithEmailAndPassword(auth, toEmail($('#lu').value), $('#lp').value); }
@@ -346,10 +389,10 @@ function passwordModal() {
 /* ====================== 6. BIBLIOTECA ====================== */
 function renderLibrary() {
   $('#main').innerHTML = `<section class="page"><div class="head"><div><h2 class="serif">Tus discursos</h2><p class="muted" id="lsub"></p></div>
-  <button class="btn gold" id="nw">${ic.plus} Nuevo discurso</button></div>
+  <div class="row"><button class="btn ghost" id="bu">${ic.download} Respaldo</button><button class="btn gold" id="nw">${ic.plus} Nuevo discurso</button></div></div>
   <div class="toolbar"><div class="search">${ic.search}<input id="q" placeholder="Buscar por título o contenido…" value="${esc(S.q)}"></div>
   <select class="f" id="tg"></select><button class="chip ${S.fav ? 'on' : ''}" id="fv">${ic.star} Favoritos</button></div><div class="grid" id="grid"></div></section>`;
-  $('#nw').onclick = () => createSpeech();
+  $('#nw').onclick = () => createSpeech(); $('#bu').onclick = backupModal;
   $('#q').oninput = e => { S.q = e.target.value; paintLibrary(); };
   $('#tg').onchange = e => { S.tag = e.target.value; paintLibrary(); };
   $('#fv').onclick = e => { S.fav = !S.fav; e.currentTarget.classList.toggle('on', S.fav); paintLibrary(); };
@@ -357,7 +400,7 @@ function renderLibrary() {
     const card = e.target.closest('.card'); if (!card) return; const id = card.dataset.id, sp = S.speeches.find(x => x.id === id), a = e.target.closest('[data-a]')?.dataset.a;
     if (a === 'fav') return updateDoc(doc(col(), id), { favorito: !sp.favorito });
     if (a === 'read') return openReader(sp);
-    if (a === 'dup') { createSpeech({ titulo: (sp.titulo || 'Sin título') + ' (copia)', contenido: sp.contenido, etiquetas: sp.etiquetas || [] }, false); return toast('Discurso duplicado'); }
+    if (a === 'dup') { createSpeech({ titulo: (sp.titulo || 'Sin título') + ' (copia)', contenido: sp.contenido, etiquetas: sp.etiquetas || [], referencias: sp.referencias || [], duracion: sp.duracion || 0 }, false); return toast('Discurso duplicado'); }
     if (a === 'del') { if (await confirmDlg('¿Eliminar discurso?', `"${sp.titulo || 'Sin título'}" se borrará de forma permanente.`)) { await deleteDoc(doc(col(), id)); toast('Discurso eliminado'); } return; }
     go('editor', id);
   };
@@ -375,8 +418,8 @@ function paintLibrary() {
   $('#grid').innerHTML = list.length ? list.map((s, i) => `<article class="card" data-id="${s.id}" style="animation-delay:${Math.min(i, 8) * 40}ms">
     <div class="card-top"><h3 class="serif">${esc(s.titulo || 'Sin título')}</h3><button class="icon star ${s.favorito ? 'on' : ''}" data-a="fav" aria-label="Favorito">${ic.star}</button></div>
     <p class="excerpt">${esc(s._t.slice(0, 170) || 'Discurso vacío…')}</p>
-    <div class="tags">${(s.etiquetas || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-    <div class="meta"><span>${s._w} palabras · ~${mins(s._w)} min</span><span>${fmtDate(s.actualizadoEn)}</span></div>
+    <div class="tags">${dueBadge(s)}${(s.etiquetas || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+    <div class="meta"><span>${s._w} palabras · ~${mins(s._w)} min${s.ensayos ? ` · ${s.ensayos} ensayo${s.ensayos > 1 ? 's' : ''}` : ''}</span><span>${fmtDate(s.actualizadoEn)}</span></div>
     <div class="card-act"><button class="btn sm gold" data-a="read">${ic.play} Leer</button><span class="grow"></span>
     <button class="icon" data-a="dup" title="Duplicar">${ic.copy}</button><button class="icon" data-a="del" title="Eliminar">${ic.trash}</button></div></article>`).join('')
     : `<div class="empty"><h3 class="serif">${S.speeches.length ? 'Sin resultados' : 'Tu primer discurso te espera'}</h3><p>${S.speeches.length ? 'Prueba con otra búsqueda o filtro.' : 'Escríbelo, ensáyalo y léelo con el modo teleprompter.'}</p>${S.speeches.length ? '' : `<button class="btn gold" onclick="document.getElementById('nw').click()">${ic.plus} Crear discurso</button>`}</div>`;
@@ -387,45 +430,88 @@ function createSpeech(data = {}, open = true) {
   if (open) go('editor', ref.id);
 }
 
+function backupModal() {
+  const m = modal(`<h3>Respaldo</h3><p class="muted">Guarda todos tus discursos en un archivo o restaura uno anterior (los importados se añaden, no reemplazan).</p><div class="actions col"><button class="btn" data-e>${ic.download} Exportar respaldo (.json)</button><label class="btn" style="margin:0;cursor:pointer;color:var(--text)">Importar respaldo<input type="file" accept=".json,application/json" style="display:none"></label></div>`);
+  m.querySelector('[data-e]').onclick = () => {
+    const data = { app: 'elocuencia', version: 1, exportado: new Date().toISOString(), discursos: S.speeches.map(s => ({ titulo: s.titulo || '', contenido: s.contenido || '', etiquetas: s.etiquetas || [], favorito: !!s.favorito, referencias: s.referencias || [], fecha: s.fecha || '', duracion: s.duracion || 0 })) };
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' })); a.download = `elocuencia-respaldo-${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(a.href); m.close(); toast('Respaldo exportado');
+  };
+  m.querySelector('input[type=file]').onchange = async e => {
+    try {
+      const j = JSON.parse(await e.target.files[0].text()), l = Array.isArray(j.discursos) ? j.discursos.slice(0, 500) : null; if (!l) throw 0;
+      const str = x => typeof x === 'string' ? x : '', arr = x => (Array.isArray(x) ? x : []).map(str);
+      l.forEach(x => createSpeech({ titulo: str(x.titulo).slice(0, 200), contenido: sanitize(str(x.contenido)), etiquetas: arr(x.etiquetas).filter(Boolean).slice(0, 8), favorito: x.favorito === true, referencias: arr(x.referencias), fecha: /^\d{4}-\d{2}-\d{2}$/.test(x.fecha) ? x.fecha : '', duracion: Math.min(180, Math.max(0, +x.duracion || 0)) }, false));
+      m.close(); toast(`${l.length} discurso(s) importado(s)`);
+    } catch (er) { toast('Archivo de respaldo no válido.', 'err'); }
+  };
+}
+
 /* ====================== 7. EDITOR ====================== */
 function renderEditor(id) {
   const sp = S.speeches.find(x => x.id === id) || { id, titulo: '', contenido: '', etiquetas: [] };
-  S.cur = { id }; S.dirty = false;
+  S.cur = { id, refs: [...(sp.referencias || [])] }; S.dirty = false;
   $('#main').innerHTML = `<section class="page narrow"><div class="ed-top"><button class="btn ghost sm" id="bk">${ic.back} Biblioteca</button><span class="grow"></span>
   <span id="st" class="muted sm">Guardado</span><button class="btn sm" id="ex">${ic.download} Exportar</button><button class="btn gold sm" id="rd">${ic.play} Leer</button></div>
   <input id="ti" class="ed-title serif" placeholder="Título del discurso" value="${esc(sp.titulo)}" aria-label="Título">
   <input id="tgs" class="ed-tags" placeholder="Etiquetas separadas por comas (ej. conferencia, domingo)" value="${esc((sp.etiquetas || []).join(', '))}" aria-label="Etiquetas">
-  <div class="fmt"><button data-c="bold" title="Negrita"><b>B</b></button><button data-c="italic" title="Cursiva"><i>I</i></button><button data-c="h2" title="Subtítulo">H</button><button data-c="ul" title="Lista">•</button><button data-c="quote" title="Cita">❝</button><button data-c="p" title="Párrafo normal">¶</button></div>
+  <div class="ed-meta"><label>Fecha del discurso<input type="date" id="fe" value="${esc(sp.fecha || '')}"></label><label>Duración objetivo (min)<input type="number" id="du" min="0" max="180" placeholder="ej. 10" value="${sp.duracion || ''}"></label></div>
+  <div class="fmt"><button data-c="bold" title="Negrita"><b>B</b></button><button data-c="italic" title="Cursiva"><i>I</i></button><button data-c="h2" title="Subtítulo">H</button><button data-c="ul" title="Lista">•</button><button data-c="quote" title="Cita">❝</button><button data-c="p" title="Párrafo normal">¶</button><button data-c="hl" title="Resaltar texto"><span style="background:var(--gold);color:#1a1407;padding:0 6px;border-radius:4px">A</span></button><button data-c="fn" title="Insertar referencia (pie de página)">A<sup>1</sup></button></div>
   <div id="ed" class="ed" contenteditable="true" data-ph="Comienza a escribir tu discurso…" spellcheck="true">${sanitize(sp.contenido)}</div>
-  <div class="ed-foot"><span id="wc"></span></div></section>`;
+  <div class="refs" id="refs"></div><div class="ed-foot"><span id="wc"></span></div></section>`;
   const ed = $('#ed'); document.execCommand('defaultParagraphSeparator', false, 'p');
-  const count = () => { const w = words(ed.innerText); $('#wc').textContent = `${w} palabras · ~${mins(w)} min de lectura`; };
+  const count = () => {
+    const w = words(htmlToText(ed.innerHTML)); let t = `${w} palabras · ~${mins(w)} min de lectura`; const du = +$('#du').value;
+    if (du) { const d = w / 130 - du; t += Math.abs(d) <= .5 ? ' · ajustado al objetivo' : d > 0 ? ` · ~${Math.round(d)} min por encima del objetivo` : ` · ~${Math.round(-d)} min por debajo del objetivo`; }
+    $('#wc').textContent = t;
+  };
+  const paintRefs = () => {
+    const r = S.cur.refs;
+    $('#refs').innerHTML = `<h4>Referencias y notas al pie<span class="sm">${r.length}</span><span class="grow"></span><button class="btn sm" id="ar">${ic.plus} Añadir</button></h4>` + (r.length ? `<ol>${r.map((t, i) => `<li class="ref"><b>${i + 1}.</b><input data-i="${i}" value="${esc(t)}" placeholder="Autor, título, fuente, página…" aria-label="Referencia ${i + 1}"><button class="icon" data-d="${i}" title="Eliminar">${ic.trash}</button></li>`).join('')}</ol>` : `<p class="muted sm">Usa el botón A¹ de la barra para citar una fuente en el texto: aparecerá numerada aquí, en el lector y al exportar.</p>`);
+    $('#ar').onclick = () => addRef(false);
+    $$('#refs input').forEach(i => i.oninput = () => { S.cur.refs[+i.dataset.i] = i.value; scheduleSave(); });
+    $$('#refs [data-d]').forEach(b => b.onclick = () => delRef(+b.dataset.d));
+  };
+  const addRef = cite => {
+    S.cur.refs.push(''); const n = S.cur.refs.length;
+    if (cite) { ed.focus(); document.execCommand('insertHTML', false, `<sup class="fn" contenteditable="false">${n}</sup>&#8203;`); }
+    paintRefs(); $$('#refs input')[n - 1].focus(); scheduleSave(); count();
+  };
+  const delRef = i => {
+    $$('sup.fn', ed).forEach(s => { const n = +s.textContent; if (n === i + 1) s.remove(); else if (n > i + 1) s.textContent = n - 1; });
+    S.cur.refs.splice(i, 1); paintRefs(); count(); scheduleSave();
+  };
+  paintRefs();
   const cmds = { bold: ['bold'], italic: ['italic'], h2: ['formatBlock', 'h2'], ul: ['insertUnorderedList'], quote: ['formatBlock', 'blockquote'], p: ['formatBlock', 'p'] };
-  $$('.fmt button').forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { ed.focus(); const [c, v] = cmds[b.dataset.c]; document.execCommand(c, false, v ?? null); scheduleSave(); }; });
+  $$('.fmt button').forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => {
+    const k = b.dataset.c; if (k === 'fn') return addRef(true); ed.focus();
+    if (k === 'hl') { document.execCommand('styleWithCSS', false, true); const cur = document.queryCommandValue('hiliteColor'), on = cur && !/^(rgba\(0, 0, 0, 0\)|transparent)$/.test(cur); document.execCommand('hiliteColor', false, on ? 'transparent' : 'rgba(214,178,110,.45)'); document.execCommand('styleWithCSS', false, false); }
+    else { const [c, v] = cmds[k]; document.execCommand(c, false, v ?? null); }
+    scheduleSave();
+  }; });
   ed.addEventListener('paste', e => { e.preventDefault(); document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain')); });
   ed.addEventListener('input', () => { count(); scheduleSave(); });
-  $('#ti').oninput = scheduleSave; $('#tgs').oninput = scheduleSave; count();
+  $('#ti').oninput = scheduleSave; $('#tgs').oninput = scheduleSave; $('#fe').oninput = scheduleSave; $('#du').oninput = () => { count(); scheduleSave(); }; count();
   $('#bk').onclick = () => go('library');
   $('#rd').onclick = async () => { await saveNow(); openReader(readEditor()); };
   $('#ex').onclick = exportModal;
   if (!sp.titulo && !sp.contenido) $('#ti').focus();
 }
-const readEditor = () => ({ id: S.cur.id, titulo: $('#ti').value.trim(), contenido: sanitize($('#ed').innerHTML), etiquetas: $('#tgs').value.split(',').map(t => t.trim()).filter(Boolean).slice(0, 8) });
+const readEditor = () => ({ id: S.cur.id, titulo: $('#ti').value.trim(), contenido: sanitize($('#ed').innerHTML), etiquetas: $('#tgs').value.split(',').map(t => t.trim()).filter(Boolean).slice(0, 8), referencias: S.cur.refs.map(t => (t || '').trim()), fecha: $('#fe').value || '', duracion: +$('#du').value || 0 });
 const setStatus = (t, c) => { const s = $('#st'); if (s) { s.textContent = t; s.style.color = c === 'err' ? 'var(--danger)' : ''; } };
 function scheduleSave() { S.dirty = true; setStatus('Guardando…'); clearTimeout(S.t); S.t = setTimeout(saveNow, 800); }
 async function saveNow() {
   if (!S.dirty || !S.cur || !$('#ed')) return; clearTimeout(S.t); S.dirty = false; const d = readEditor();
-  try { await updateDoc(doc(col(), d.id), { titulo: d.titulo, contenido: d.contenido, etiquetas: d.etiquetas, actualizadoEn: serverTimestamp() }); if (!S.dirty) setStatus('Guardado'); }
+  try { await updateDoc(doc(col(), d.id), { titulo: d.titulo, contenido: d.contenido, etiquetas: d.etiquetas, referencias: d.referencias, fecha: d.fecha, duracion: d.duracion, actualizadoEn: serverTimestamp() }); if (!S.dirty) setStatus('Guardado'); }
   catch (e) { S.dirty = true; setStatus('Error al guardar', 'err'); }
 }
 function flushSave() { if (S.view === 'editor' && S.dirty) saveNow(); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) flushSave(); });
 window.addEventListener('beforeunload', flushSave);
 function exportModal() {
-  const d = readEditor(), text = htmlToText(d.contenido), name = (d.titulo || 'discurso').toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi, '-').replace(/^-|-$/g, '') || 'discurso';
+  const d = readEditor(), text = htmlToText(d.contenido, true) + refsTxt(d.referencias), name = (d.titulo || 'discurso').toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi, '-').replace(/^-|-$/g, '') || 'discurso';
   const m = modal(`<h3>Exportar</h3><div class="actions col"><button class="btn" data-t>${ic.download} Texto (.txt)</button><button class="btn" data-p>${ic.download} PDF / Imprimir</button><button class="btn ghost danger" data-d style="color:var(--danger)">${ic.trash} Eliminar discurso</button></div>`);
   m.querySelector('[data-t]').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`${d.titulo}\n\n${text}\n`], { type: 'text/plain;charset=utf-8' })); a.download = name + '.txt'; a.click(); URL.revokeObjectURL(a.href); m.close(); };
-  m.querySelector('[data-p]').onclick = () => { m.close(); $('#print').innerHTML = `<h1>${esc(d.titulo)}</h1>${d.contenido}`; document.body.classList.add('printing'); window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true }); setTimeout(() => window.print(), 150); };
+  m.querySelector('[data-p]').onclick = () => { m.close(); $('#print').innerHTML = `<h1>${esc(d.titulo)}</h1>${d.contenido}${refsHtml(d.referencias, 'pr-refs')}`; document.body.classList.add('printing'); window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true }); setTimeout(() => window.print(), 150); };
   m.querySelector('[data-d]').onclick = async () => { m.close(); if (await confirmDlg('¿Eliminar discurso?', 'Se borrará de forma permanente.')) { S.dirty = false; await deleteDoc(doc(col(), d.id)); toast('Discurso eliminado'); go('library'); } };
 }
 
@@ -433,9 +519,10 @@ function exportModal() {
 function openReader(sp) {
   let cfg = { speed: 60, fs: 44, lh: 1.7, w: 70, mirror: false, guide: true, target: 0 };
   try { cfg = { ...cfg, ...JSON.parse(localStorage.getItem('elo_rd') || '{}') }; } catch (e) { }
+  cfg.target = sp.duracion || 0;
   const ov = document.createElement('div'); ov.className = 'reader';
   ov.innerHTML = `<div class="r-prog"><i id="rp"></i></div>
-  <div class="r-scroll" id="rs"><article class="r-content" id="rc"><h1>${esc(sp.titulo || '')}</h1>${sanitize(sp.contenido || '')}</article></div><div class="r-guide" id="rg"></div>
+  <div class="r-scroll" id="rs"><article class="r-content" id="rc"><h1>${esc(sp.titulo || '')}</h1>${sanitize(sp.contenido || '')}${refsHtml(sp.referencias, 'r-refs')}</article></div><div class="r-guide" id="rg"></div>
   <div class="r-ctrl"><div class="r-row"><button class="rb" id="rx" title="Salir (Esc)">${ic.x}</button><button class="rb" id="rr" title="Reiniciar">${ic.restart}</button>
   <button class="rb big" id="rpl" title="Reproducir / pausa (Espacio)">${ic.play}</button>
   <label class="rl">Velocidad<input type="range" id="rsp" min="10" max="220" step="5"></label>
@@ -445,7 +532,7 @@ function openReader(sp) {
   document.body.appendChild(ov); try { ov.requestFullscreen?.(); } catch (e) { }
   const rs = $('#rs', ov), rc = $('#rc', ov), rpl = $('#rpl', ov);
   let playing = false, raf, last = 0, pos = 0, lastSet = 0, elapsed = 0, idle;
-  const save = () => { try { localStorage.setItem('elo_rd', JSON.stringify(cfg)); } catch (e) { } };
+  const save = () => { try { localStorage.setItem('elo_rd', JSON.stringify({ ...cfg, target: 0 })); } catch (e) { } };
   const apply = () => {
     rc.style.fontSize = cfg.fs + 'px'; rc.style.lineHeight = cfg.lh; rc.style.maxWidth = cfg.w + 'vw'; rc.style.transform = cfg.mirror ? 'scaleX(-1)' : '';
     $('#rg', ov).style.display = cfg.guide ? '' : 'none'; $('#rm', ov).classList.toggle('on', cfg.mirror); $('#rgd', ov).classList.toggle('on', cfg.guide);
@@ -476,7 +563,8 @@ function openReader(sp) {
   bindR('rsp', 'speed'); bindR('rfs', 'fs'); bindR('rlh', 'lh'); bindR('rw', 'w'); bindR('rtg', 'target');
   $('#rm', ov).onclick = () => { cfg.mirror = !cfg.mirror; apply(); save(); };
   $('#rgd', ov).onclick = () => { cfg.guide = !cfg.guide; apply(); save(); };
-  const close = () => { setPlay(false); clearTimeout(idle); document.removeEventListener('keydown', keys, true); ov.remove(); if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { }); };
+  const close = () => { setPlay(false); clearTimeout(idle);
+    if (sp.id && elapsed >= 30) { updateDoc(doc(col(), sp.id), { ensayos: increment(1), ultimoEnsayo: serverTimestamp(), ultimaDuracion: Math.round(elapsed) }).catch(() => { }); toast('Ensayo registrado · ' + fmtTime(elapsed)); } document.removeEventListener('keydown', keys, true); ov.remove(); if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { }); };
   $('#rx', ov).onclick = close;
   function keys(e) {
     if (e.target.tagName === 'INPUT' && e.target.type === 'number') return;
