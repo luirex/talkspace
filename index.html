@@ -9,23 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDUY9eNQas93voBm9hWMxflW672H7lrCYw",
-  authDomain: "talkspace-52f14.firebaseapp.com",
-  projectId: "talkspace-52f14",
-  storageBucket: "talkspace-52f14.firebasestorage.app",
-  messagingSenderId: "617878123650",
-  appId: "1:617878123650:web:f97f86dbb7ee44c3d2f09b"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 /* ============ TEMAS ============ */
 :root{--ease:cubic-bezier(.2,.7,.2,1);--r:14px}
 [data-theme=dark]{--bg:#0c0c0f;--bg2:#121217;--card:#17171e;--card2:#1e1e27;--line:rgba(255,255,255,.08);--text:#ece8df;--muted:#9b978d;--gold:#d6b26e;--gold-i:#1a1407;--danger:#e5636b;--ok:#6fcf97;--sh:0 12px 34px rgba(0,0,0,.5);--glow:radial-gradient(900px 520px at 85% -10%,rgba(214,178,110,.13),transparent 60%),radial-gradient(700px 400px at -10% 110%,rgba(214,178,110,.06),transparent 60%)}
@@ -177,12 +160,12 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
 /* ====================== 1. CONFIGURACIÓN FIREBASE ======================
    Pega aquí los datos de tu proyecto (Firebase Console → Configuración → Tus apps → Web) */
 const firebaseConfig = {
-  apiKey: "PEGA_TU_API_KEY",
-  authDomain: "PEGA_TU_PROYECTO.firebaseapp.com",
-  projectId: "PEGA_TU_PROJECT_ID",
-  storageBucket: "PEGA_TU_PROYECTO.appspot.com",
-  messagingSenderId: "PEGA_TU_SENDER_ID",
-  appId: "PEGA_TU_APP_ID"
+  apiKey: "AIzaSyDUY9eNQas93voBm9hWMxflW672H7lrCYw",
+  authDomain: "talkspace-52f14.firebaseapp.com",
+  projectId: "talkspace-52f14",
+  storageBucket: "talkspace-52f14.firebasestorage.app",
+  messagingSenderId: "617878123650",
+  appId: "1:617878123650:web:f97f86dbb7ee44c3d2f09b"
 };
 const CONFIGURED = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("PEGA");
 const DOMAIN = "@discursos.app";
