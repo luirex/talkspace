@@ -389,7 +389,7 @@ function passwordModal() {
 /* ====================== 6. BIBLIOTECA ====================== */
 function renderLibrary() {
   $('#main').innerHTML = `<section class="page"><div class="head"><div><h2 class="serif">Tus discursos</h2><p class="muted" id="lsub"></p></div>
-  <div class="row"><button class="btn ghost" id="bu">${ic.download} Respaldo</button><button class="btn gold" id="nw">${ic.plus} Nuevo discurso</button></div></div>
+  <div class="row"><button class="btn ghost" id="bu">${ic.download} Importar / Respaldo</button><button class="btn gold" id="nw">${ic.plus} Nuevo discurso</button></div></div>
   <div class="toolbar"><div class="search">${ic.search}<input id="q" placeholder="Buscar por título o contenido…" value="${esc(S.q)}"></div>
   <select class="f" id="tg"></select><button class="chip ${S.fav ? 'on' : ''}" id="fv">${ic.star} Favoritos</button></div><div class="grid" id="grid"></div></section>`;
   $('#nw').onclick = () => createSpeech(); $('#bu').onclick = backupModal;
@@ -430,13 +430,71 @@ function createSpeech(data = {}, open = true) {
   if (open) go('editor', ref.id);
 }
 
+/* ---- Importar Word / PDF / TXT (librerías cargadas solo cuando se necesitan) ---- */
+const loadScript = src => new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => ko(new Error('No se pudo cargar ' + src)); document.head.appendChild(s); });
+const MAMMOTH = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+const PDFJS_W = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const textToHtml = t => t.split(/\n{2,}/).map(p => p.trim()).filter(Boolean).map(p => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join('');
+async function docxToHtml(buf) {
+  if (!window.mammoth) await loadScript(MAMMOTH);
+  const r = await window.mammoth.convertToHtml({ arrayBuffer: buf }, { convertImage: window.mammoth.images.imgElement(() => Promise.resolve({ src: '' })) });
+  const d = new DOMParser().parseFromString('<body>' + r.value, 'text/html');
+  d.querySelectorAll('img').forEach(n => n.remove());
+  d.querySelectorAll('h1,h3,h4,h5,h6').forEach(h => { const n = document.createElement('h2'); n.innerHTML = h.innerHTML; h.replaceWith(n); });
+  d.querySelectorAll('ol,table').forEach(n => { if (n.tagName === 'TABLE') n.replaceWith(...[...n.querySelectorAll('tr')].map(tr => { const p = document.createElement('p'); p.textContent = [...tr.children].map(c => c.textContent.trim()).join(' · '); return p; })); });
+  d.querySelectorAll('a').forEach(a => a.replaceWith(...a.childNodes));
+  d.querySelectorAll('p').forEach(p => { if (!p.textContent.trim() && !p.querySelector('br')) p.remove(); });
+  return d.body.innerHTML;
+}
+async function pdfToHtml(buf) {
+  if (!window.pdfjsLib) { await loadScript(PDFJS); window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_W; }
+  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise, paras = [];
+  for (let n = 1; n <= pdf.numPages; n++) {
+    const items = (await (await pdf.getPage(n)).getTextContent()).items.filter(i => i.str !== undefined);
+    let cur = '', py = null, ph = 0;
+    for (const it of items) {
+      const y = it.transform[5], h = Math.abs(it.transform[3]) || 10;
+      if (py !== null && Math.abs(py - y) > h * .5 && it.str.trim()) {
+        if (py - y > Math.max(ph, h) * 1.7 || y > py) { if (cur.trim()) paras.push(cur.trim()); cur = ''; }
+        else cur = cur.endsWith('-') ? cur.slice(0, -1) : cur.replace(/\s*$/, ' ');
+      }
+      cur += it.str; if (it.str.trim()) { py = y; ph = h; }
+    }
+    if (cur.trim()) paras.push(cur.trim());
+  }
+  return paras.filter(p => !/^\d{1,3}$/.test(p)).map(p => `<p>${esc(p.replace(/\s{2,}/g, ' '))}</p>`).join('');
+}
+async function importDocs(files) {
+  let ok = 0;
+  for (const f of files) {
+    const ext = (f.name.split('.').pop() || '').toLowerCase(), title = f.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').trim().slice(0, 200);
+    try {
+      if (f.size > 15 * 1024 * 1024) throw new Error('El archivo supera 15 MB.');
+      toast(`Importando ${f.name}…`);
+      let html;
+      if (ext === 'docx') html = await docxToHtml(await f.arrayBuffer());
+      else if (ext === 'pdf') html = await pdfToHtml(await f.arrayBuffer());
+      else if (ext === 'txt') html = textToHtml((await f.text()).replace(/\r\n?/g, '\n'));
+      else if (ext === 'doc') throw new Error('Formato .doc antiguo: guárdalo como .docx desde Word.');
+      else throw new Error('Formato no compatible.');
+      html = sanitize(html);
+      if (!htmlToText(html)) throw new Error('No se encontró texto (¿PDF escaneado como imagen?).');
+      if (new Blob([html]).size > 900000) throw new Error('El texto es demasiado largo para un solo discurso.');
+      createSpeech({ titulo: title, contenido: html, etiquetas: ['importado'] }, false); ok++;
+    } catch (er) { console.error(er); toast(`${f.name}: ${er.message || 'no se pudo importar.'}`, 'err'); }
+  }
+  if (ok) toast(`${ok} discurso${ok > 1 ? 's' : ''} importado${ok > 1 ? 's' : ''}`);
+}
+
 function backupModal() {
-  const m = modal(`<h3>Respaldo</h3><p class="muted">Guarda todos tus discursos en un archivo o restaura uno anterior (los importados se añaden, no reemplazan).</p><div class="actions col"><button class="btn" data-e>${ic.download} Exportar respaldo (.json)</button><label class="btn" style="margin:0;cursor:pointer;color:var(--text)">Importar respaldo<input type="file" accept=".json,application/json" style="display:none"></label></div>`);
+  const m = modal(`<h3>Importar y respaldo</h3><p class="muted">Importa discursos desde Word (.docx), PDF o texto, o gestiona un respaldo completo. Lo importado se añade, no reemplaza.</p><div class="actions col"><button class="btn" data-e>${ic.download} Exportar respaldo (.json)</button><label class="btn gold" style="margin:0;cursor:pointer">${ic.plus} Importar Word, PDF o TXT<input type="file" data-doc multiple accept=".docx,.pdf,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" style="display:none"></label><label class="btn" style="margin:0;cursor:pointer;color:var(--text)">Importar respaldo (.json)<input type="file" data-json accept=".json,application/json" style="display:none"></label></div>`);
+  m.querySelector('input[data-doc]').onchange = async e => { const fs = [...e.target.files]; m.close(); await importDocs(fs); };
   m.querySelector('[data-e]').onclick = () => {
     const data = { app: 'elocuencia', version: 1, exportado: new Date().toISOString(), discursos: S.speeches.map(s => ({ titulo: s.titulo || '', contenido: s.contenido || '', etiquetas: s.etiquetas || [], favorito: !!s.favorito, referencias: s.referencias || [], fecha: s.fecha || '', duracion: s.duracion || 0 })) };
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' })); a.download = `elocuencia-respaldo-${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(a.href); m.close(); toast('Respaldo exportado');
   };
-  m.querySelector('input[type=file]').onchange = async e => {
+  m.querySelector('input[data-json]').onchange = async e => {
     try {
       const j = JSON.parse(await e.target.files[0].text()), l = Array.isArray(j.discursos) ? j.discursos.slice(0, 500) : null; if (!l) throw 0;
       const str = x => typeof x === 'string' ? x : '', arr = x => (Array.isArray(x) ? x : []).map(str);
