@@ -163,6 +163,22 @@ sup.fn{color:var(--gold);font:600 .65em Inter,sans-serif;padding:0 2px;user-sele
 label.chk{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer;color:var(--muted)}
 .chk input{width:16px;height:16px;margin:0;padding:0;accent-color:var(--gold)}
 .lnk{color:var(--gold);font-size:13px}.lnk:hover{text-decoration:underline}
+.modal.wide{max-width:540px}
+label textarea{display:block;width:100%;margin-top:6px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--text);font:inherit;resize:vertical;min-height:110px}
+label textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)}
+.fmt button svg{width:17px;height:17px;vertical-align:middle}
+.qlist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:52vh;overflow:auto}
+.tpl{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);transition:.2s}
+.tpl:hover{border-color:var(--gold);transform:translateY(-1px)}.tpl b{font-weight:600}.tpl span{font-size:12px;color:var(--muted)}
+.tpl-row{display:flex;gap:6px;align-items:center}.tpl-row .tpl{flex:1}
+.qt{font:italic 17px/1.6 Lora,Georgia,serif;border-left:3px solid var(--gold);padding-left:14px;color:var(--text)}
+.vrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.vrow .grow{min-width:0}
+.vprev{margin-top:12px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);max-height:34vh;overflow:auto;font:15px/1.7 Lora,Georgia,serif}
+.vprev p{margin-bottom:.7em}.vprev blockquote{border-left:3px solid var(--gold);padding-left:12px;font-style:italic;color:var(--muted)}
+.sh-title{font-size:clamp(30px,6vw,46px);line-height:1.2;margin:6px 0}
+.ed.ro{min-height:0;margin-top:26px}
+.refs-ro{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);font-size:15px;color:var(--muted)}
+.refs-ro h2{font:600 20px 'Playfair Display',serif;color:var(--gold);margin:0 0 10px}.refs-ro p{margin-bottom:6px}
 
 /* ============ IMPRESIÓN ============ */
 #print{display:none}
@@ -177,7 +193,7 @@ label.chk{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer;color:
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, orderBy, onSnapshot, serverTimestamp, writeBatch, getDocs, getCountFromServer, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, orderBy, onSnapshot, serverTimestamp, writeBatch, getDocs, getCountFromServer, increment, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ====================== 1. CONFIGURACIÓN FIREBASE ======================
    Pega aquí los datos de tu proyecto (Firebase Console → Configuración → Tus apps → Web) */
@@ -210,7 +226,11 @@ const ic = {
   power: svg('<path d="M12 3v9M6.3 6.3a8 8 0 1011.4 0"/>'), download: svg('<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>'),
   x: svg('<path d="M6 6l12 12M18 6L6 18"/>'), mirror: svg('<path d="M12 3v18M8 7L3 12l5 5zM16 7l5 5-5 5z"/>'), restart: svg('<path d="M4 12a8 8 0 108-8M4 4v5h5"/>'),
   line: svg('<path d="M3 12h18M3 6l3 0M3 18l3 0"/>'),
-  cal: svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>')
+  cal: svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
+  clock: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  quote: svg('<path d="M6 17c0-4 1-7 4-9M14 17c0-4 1-7 4-9"/><path d="M5 12h5v5H5zM13 12h5v5h-5z"/>'),
+  share: svg('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>'),
+  tpl: svg('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>')
 };
 const words = t => (t.trim().match(/\S+/g) || []).length;
 const mins = w => Math.max(1, Math.round(w / 130));
@@ -234,9 +254,9 @@ const authMsg = c => ({
   'auth/requires-recent-login': 'Vuelve a iniciar sesión e inténtalo de nuevo.', 'permission-denied': 'No tienes permiso para esta acción.'
 }[c] || 'Ocurrió un error. Intenta de nuevo.');
 function toast(m, t = 'ok') { const e = document.createElement('div'); e.className = 'toast ' + t; e.textContent = m; $('#toasts').appendChild(e); setTimeout(() => { e.classList.add('out'); setTimeout(() => e.remove(), 300); }, 3200); }
-function modal(html) {
+function modal(html, cls = '') {
   const o = document.createElement('div'); o.className = 'overlay';
-  o.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`; document.body.appendChild(o);
+  o.innerHTML = `<div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div>`; document.body.appendChild(o);
   o.close = () => { o.classList.remove('in'); setTimeout(() => o.remove(), 200); };
   o.addEventListener('mousedown', e => { if (e.target === o) o.close(); });
   requestAnimationFrame(() => o.classList.add('in')); return o;
@@ -255,7 +275,7 @@ try { setTheme(localStorage.getItem('elo_theme') || 'dark'); } catch (e) { }
 
 /* ====================== 3. FIREBASE + ESTADO ====================== */
 let auth, db, secAuth;
-const S = { user: null, profile: null, speeches: [], users: [], counts: {}, view: '', cur: null, dirty: false, registering: false, q: '', tag: '', fav: false };
+const S = { quotes: [], user: null, profile: null, speeches: [], users: [], counts: {}, view: '', cur: null, dirty: false, registering: false, q: '', tag: '', fav: false };
 if (CONFIGURED) {
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
@@ -263,6 +283,10 @@ if (CONFIGURED) {
   secAuth = getAuth(initializeApp(firebaseConfig, 'sec'));
 }
 const col = () => collection(db, 'users', S.user.uid, 'speeches');
+const vcol = id => collection(db, 'users', S.user.uid, 'speeches', id, 'versions');
+const qcol = () => collection(db, 'users', S.user.uid, 'quotes');
+const tcol = () => collection(db, 'users', S.user.uid, 'templates');
+const SHARE = (location.hash.match(/^#\/v\/([A-Za-z0-9]{10,64})$/) || [])[1];
 
 /* ====================== 4. AUTENTICACIÓN ====================== */
 const authShell = inner => `<div class="auth"><div class="auth-card"><div class="logo">E</div>${inner}</div></div>`;
@@ -336,8 +360,9 @@ async function handleUser(u) {
     S.user = u; S.profile = { id: u.uid, ...p }; startApp();
   } catch (e) { console.error(e); try { await signOut(auth); } catch (x) { } toast(authMsg(e.code), 'err'); }
 }
-function stopListeners() { S.unsubSp?.(); S.unsubUsers?.(); S.unsubSp = S.unsubUsers = null; S.speeches = []; S.users = []; S.counts = {}; S.cur = null; S.dirty = false; }
+function stopListeners() { S.unsubSp?.(); S.unsubUsers?.(); S.unsubQ?.(); S.unsubSp = S.unsubUsers = S.unsubQ = null; S.quotes = []; S.speeches = []; S.users = []; S.counts = {}; S.cur = null; S.dirty = false; }
 if (!CONFIGURED) showNotConfigured();
+else if (SHARE) showShared(SHARE);
 else onAuthStateChanged(auth, async u => {
   if (S.registering) return;
   if (!u) { stopListeners(); S.user = S.profile = null; return showLogin(); }
@@ -348,7 +373,7 @@ else onAuthStateChanged(auth, async u => {
 function startApp() {
   const p = S.profile, admin = p.rol === 'admin';
   $('#root').innerHTML = `<header class="top"><div class="wrap row"><div class="brand"><span class="logo sm">E</span><span class="hide-s">Elocuencia</span></div>
-  <nav><button data-v="library">Biblioteca</button>${admin ? '<button data-v="admin">Administración</button>' : ''}</nav><div class="grow"></div>
+  <nav><button data-v="library">Biblioteca</button><button data-v="quotes">Citas</button>${admin ? '<button data-v="admin">Administración</button>' : ''}</nav><div class="grow"></div>
   <button class="icon" id="th" aria-label="Cambiar tema"></button>
   <button class="user" id="um"><span class="av">${esc(p.nombre.trim()[0] || '?').toUpperCase()}</span><span class="hide-s sm">${esc(p.nombre.split(' ')[0])}</span></button></div></header><main id="main" class="wrap"></main>`;
   const paintTheme = () => $('#th').innerHTML = document.documentElement.dataset.theme === 'dark' ? ic.sun : ic.moon;
@@ -359,13 +384,14 @@ function startApp() {
     S.speeches = snap.docs.map(d => { const x = { id: d.id, ...d.data() }; x._t = htmlToText(x.contenido); x._w = words(x._t); return x; });
     paintLibrary();
   }, e => { console.error(e); toast('No se pudieron cargar los discursos.', 'err'); });
+  S.unsubQ = onSnapshot(query(qcol(), orderBy('creadoEn', 'desc')), snap => { S.quotes = snap.docs.map(d => ({ id: d.id, ...d.data() })); paintQuotes(); }, e => console.error(e));
   go('library');
 }
 function go(v, id) {
   flushSave(); S.view = v;
   if (v !== 'admin') { S.unsubUsers?.(); S.unsubUsers = null; }
   $$('nav [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v || (v === 'editor' && b.dataset.v === 'library')));
-  ({ library: renderLibrary, editor: () => renderEditor(id), admin: renderAdmin })[v](); window.scrollTo(0, 0);
+  ({ library: renderLibrary, quotes: renderQuotes, editor: () => renderEditor(id), admin: renderAdmin })[v](); window.scrollTo(0, 0);
 }
 function accountModal() {
   const p = S.profile;
@@ -392,7 +418,7 @@ function renderLibrary() {
   <div class="row"><button class="btn ghost" id="bu">${ic.download} Importar / Respaldo</button><button class="btn gold" id="nw">${ic.plus} Nuevo discurso</button></div></div>
   <div class="toolbar"><div class="search">${ic.search}<input id="q" placeholder="Buscar por título o contenido…" value="${esc(S.q)}"></div>
   <select class="f" id="tg"></select><button class="chip ${S.fav ? 'on' : ''}" id="fv">${ic.star} Favoritos</button></div><div class="grid" id="grid"></div></section>`;
-  $('#nw').onclick = () => createSpeech(); $('#bu').onclick = backupModal;
+  $('#nw').onclick = templateModal; $('#bu').onclick = backupModal;
   $('#q').oninput = e => { S.q = e.target.value; paintLibrary(); };
   $('#tg').onchange = e => { S.tag = e.target.value; paintLibrary(); };
   $('#fv').onclick = e => { S.fav = !S.fav; e.currentTarget.classList.toggle('on', S.fav); paintLibrary(); };
@@ -401,7 +427,7 @@ function renderLibrary() {
     if (a === 'fav') return updateDoc(doc(col(), id), { favorito: !sp.favorito });
     if (a === 'read') return openReader(sp);
     if (a === 'dup') { createSpeech({ titulo: (sp.titulo || 'Sin título') + ' (copia)', contenido: sp.contenido, etiquetas: sp.etiquetas || [], referencias: sp.referencias || [], duracion: sp.duracion || 0 }, false); return toast('Discurso duplicado'); }
-    if (a === 'del') { if (await confirmDlg('¿Eliminar discurso?', `"${sp.titulo || 'Sin título'}" se borrará de forma permanente.`)) { await deleteDoc(doc(col(), id)); toast('Discurso eliminado'); } return; }
+    if (a === 'del') { if (await confirmDlg('¿Eliminar discurso?', `"${sp.titulo || 'Sin título'}" se borrará de forma permanente.`)) { try { await removeSpeech(id); toast('Discurso eliminado'); } catch (er) { toast(authMsg(er.code), 'err'); } } return; }
     go('editor', id);
   };
   paintLibrary();
@@ -418,7 +444,7 @@ function paintLibrary() {
   $('#grid').innerHTML = list.length ? list.map((s, i) => `<article class="card" data-id="${s.id}" style="animation-delay:${Math.min(i, 8) * 40}ms">
     <div class="card-top"><h3 class="serif">${esc(s.titulo || 'Sin título')}</h3><button class="icon star ${s.favorito ? 'on' : ''}" data-a="fav" aria-label="Favorito">${ic.star}</button></div>
     <p class="excerpt">${esc(s._t.slice(0, 170) || 'Discurso vacío…')}</p>
-    <div class="tags">${dueBadge(s)}${(s.etiquetas || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+    <div class="tags">${dueBadge(s)}${s.compartido ? '<span class="tag">Compartido</span>' : ''}${(s.etiquetas || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
     <div class="meta"><span>${s._w} palabras · ~${mins(s._w)} min${s.ensayos ? ` · ${s.ensayos} ensayo${s.ensayos > 1 ? 's' : ''}` : ''}</span><span>${fmtDate(s.actualizadoEn)}</span></div>
     <div class="card-act"><button class="btn sm gold" data-a="read">${ic.play} Leer</button><span class="grow"></span>
     <button class="icon" data-a="dup" title="Duplicar">${ic.copy}</button><button class="icon" data-a="del" title="Eliminar">${ic.trash}</button></div></article>`).join('')
@@ -504,16 +530,217 @@ function backupModal() {
   };
 }
 
+/* ====================== 6b. VERSIONES · PLANTILLAS · CITAS · COMPARTIR · WORD ====================== */
+async function removeSpeech(id) {
+  const s = S.speeches.find(x => x.id === id) || {}, bt = writeBatch(db);
+  (await getDocs(vcol(id))).forEach(v => bt.delete(v.ref));
+  if (s.compartido) bt.delete(doc(db, 'shared', s.compartido));
+  bt.delete(doc(col(), id)); await bt.commit();
+}
+
+/* ---- Versiones ---- */
+const snapVersion = (d, label) => setDoc(doc(vcol(d.id)), { titulo: d.titulo || '', contenido: d.contenido || '', referencias: d.referencias || [], etiqueta: label || '', palabras: words(htmlToText(d.contenido)), creadoEn: serverTimestamp() });
+function maybeSnapshot(d) {
+  const c = S.cur; if (!c || c.id !== d.id) return;
+  if (c.base !== undefined) { const b = c.base; c.base = undefined; if (b && htmlToText(b) && b !== d.contenido) snapVersion({ id: d.id, titulo: c.baseT, contenido: b, referencias: c.baseR }, 'Al abrir').catch(() => { }); }
+  if (Date.now() - c.verT >= 300000 && d.contenido !== c.verC) { c.verT = Date.now(); c.verC = d.contenido; snapVersion(d, '').catch(() => { }); }
+}
+async function historyModal() {
+  await saveNow(); const id = S.cur.id; let vs = [];
+  const m = modal(`<h3>Historial de versiones</h3><p class="muted sm" style="margin-bottom:10px">Se guardan copias automáticas mientras escribes y puedes crear una a mano. Al restaurar, la versión actual también se guarda.</p><div id="vl"><p class="muted sm">Cargando…</p></div><div id="vp"></div><div class="actions" style="margin-top:14px"><button class="btn sm" data-s>${ic.plus} Guardar versión ahora</button><button class="btn ghost" data-c>Cerrar</button></div>`, 'wide');
+  const when = v => v.creadoEn?.toDate ? v.creadoEn.toDate().toLocaleString('es-EC', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'ahora';
+  const paint = () => { $('#vl', m).innerHTML = vs.length ? vs.map(v => `<div class="vrow" data-id="${v.id}"><div class="grow"><b>${when(v)}</b>${v.etiqueta ? ` <span class="tag">${esc(v.etiqueta)}</span>` : ''}<div class="muted sm">${v.palabras || 0} palabras</div></div><button class="btn sm ghost" data-a="vw">Ver</button><button class="btn sm" data-a="rs">Restaurar</button></div>`).join('') : '<p class="muted sm">Aún no hay versiones guardadas.</p>'; };
+  const load = async () => {
+    try {
+      const sn = await getDocs(query(vcol(id), orderBy('creadoEn', 'desc'), limit(60))); vs = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (vs.length > 50) { const bt = writeBatch(db); vs.slice(50).forEach(v => bt.delete(doc(vcol(id), v.id))); bt.commit().catch(() => { }); vs = vs.slice(0, 50); }
+    } catch (e) { toast(authMsg(e.code), 'err'); } paint();
+  };
+  m.addEventListener('click', async e => {
+    if (e.target.closest('[data-c]')) return m.close();
+    if (e.target.closest('[data-s]')) { try { await snapVersion(readEditor(), 'Manual'); toast('Versión guardada'); await load(); } catch (er) { toast(authMsg(er.code), 'err'); } return; }
+    const b = e.target.closest('[data-a]'); if (!b) return; const v = vs.find(x => x.id === b.closest('.vrow').dataset.id); if (!v) return;
+    if (b.dataset.a === 'vw') { $('#vp', m).innerHTML = `<div class="vprev"><b class="serif">${esc(v.titulo || 'Sin título')}</b>${sanitize(v.contenido)}${refsHtml(v.referencias, 'refs-ro')}</div>`; return; }
+    if (!await confirmDlg('¿Restaurar esta versión?', 'Reemplazará el texto actual. Antes se guardará una copia del texto actual por si quieres volver.', 'Restaurar', false)) return;
+    try {
+      await snapVersion(readEditor(), 'Antes de restaurar');
+      await updateDoc(doc(col(), id), { titulo: v.titulo || '', contenido: v.contenido || '', referencias: v.referencias || [], actualizadoEn: serverTimestamp() });
+      S.dirty = false; clearTimeout(S.t); m.close(); go('editor', id); toast('Versión restaurada');
+    } catch (er) { toast(authMsg(er.code), 'err'); }
+  });
+  load();
+}
+
+/* ---- Compartir (enlace público de solo lectura) ---- */
+const rid = () => Array.from(crypto.getRandomValues(new Uint8Array(22)), b => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 56]).join('');
+const sharePayload = d => ({ owner: S.user.uid, titulo: d.titulo || '', contenido: d.contenido || '', referencias: d.referencias || [], duracion: d.duracion || 0, actualizadoEn: serverTimestamp() });
+function syncShare(d) { const t = S.cur?.share; if (t) setDoc(doc(db, 'shared', t), sharePayload(d)).catch(() => { }); }
+async function shareModal() {
+  await saveNow(); const id = S.cur.id; let t = S.cur.share;
+  const link = () => `${location.origin}${location.pathname}#/v/${t}`;
+  const m = modal(`<h3>Compartir discurso</h3><div id="sb"></div>`);
+  const paint = () => {
+    $('#sb', m).innerHTML = t
+      ? `<p class="muted">Cualquier persona con este enlace puede leer el discurso, sin editarlo ni ver el resto de tu cuenta. Se actualiza cada vez que guardas cambios.</p><label>Enlace<input id="sl" readonly value="${esc(link())}"></label><div class="actions"><button class="btn danger sm" data-x>Dejar de compartir</button><button class="btn gold" data-cp>${ic.copy} Copiar enlace</button></div>`
+      : `<p class="muted">Crea un enlace de solo lectura para que otra persona pueda leer este discurso. Podrás desactivarlo cuando quieras.</p><div class="actions"><button class="btn ghost" data-c>Cancelar</button><button class="btn gold" data-g>Crear enlace</button></div>`;
+  };
+  paint();
+  m.addEventListener('click', async e => {
+    const b = e.target.closest('[data-c],[data-g],[data-x],[data-cp]'); if (!b) return;
+    try {
+      if (b.hasAttribute('data-c')) return m.close();
+      if (b.hasAttribute('data-g')) { t = rid(); await setDoc(doc(db, 'shared', t), sharePayload(readEditor())); await updateDoc(doc(col(), id), { compartido: t }); S.cur.share = t; paint(); }
+      else if (b.hasAttribute('data-x')) { await deleteDoc(doc(db, 'shared', t)); await updateDoc(doc(col(), id), { compartido: '' }); t = ''; S.cur.share = ''; paint(); toast('Dejaste de compartir este discurso'); }
+      else { const i = $('#sl', m); try { await navigator.clipboard.writeText(i.value); toast('Enlace copiado'); } catch (x) { i.select(); toast('Copia el enlace seleccionado'); } }
+    } catch (er) { toast(authMsg(er.code), 'err'); }
+  });
+}
+async function showShared(token) {
+  $('#root').innerHTML = `<div class="auth"><p class="muted">Cargando…</p></div>`;
+  let x;
+  try { const s = await getDoc(doc(db, 'shared', token)); if (!s.exists()) throw 0; x = s.data(); }
+  catch (e) { $('#root').innerHTML = authShell(`<h1 class="serif">Enlace no disponible</h1><p class="muted">Este discurso no existe o su autor dejó de compartirlo.</p><a class="btn gold block" href="${location.pathname}">Abrir Elocuencia</a>`); return; }
+  document.title = (x.titulo || 'Discurso') + ' — Elocuencia';
+  const w = words(htmlToText(x.contenido));
+  $('#root').innerHTML = `<header class="top"><div class="wrap row"><div class="brand"><span class="logo sm">E</span><span class="hide-s">Elocuencia</span></div><div class="grow"></div><button class="icon" id="th" aria-label="Cambiar tema"></button><button class="btn sm" id="pp">${ic.download} PDF</button><button class="btn gold sm" id="pr">${ic.play} Leer</button></div></header>
+  <main class="wrap"><article class="page narrow"><p class="muted sm">Solo lectura</p><h1 class="serif sh-title">${esc(x.titulo || 'Sin título')}</h1><p class="muted sm">${w} palabras · ~${mins(w)} min de lectura</p><div class="ed ro">${sanitize(x.contenido)}</div>${refsHtml(x.referencias, 'refs-ro')}</article></main>`;
+  const paintTheme = () => $('#th').innerHTML = document.documentElement.dataset.theme === 'dark' ? ic.sun : ic.moon;
+  paintTheme(); $('#th').onclick = () => { setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); paintTheme(); };
+  $('#pr').onclick = () => openReader({ titulo: x.titulo, contenido: x.contenido, referencias: x.referencias, duracion: x.duracion });
+  $('#pp').onclick = () => { $('#print').innerHTML = `<h1>${esc(x.titulo)}</h1>${sanitize(x.contenido)}${refsHtml(x.referencias, 'pr-refs')}`; document.body.classList.add('printing'); window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true }); setTimeout(() => window.print(), 150); };
+}
+
+/* ---- Plantillas / esquemas ---- */
+const sec = (h, t) => `<h2>${h}</h2><p><i>${t}</i></p>`;
+const TPL = [
+  { n: 'En blanco', d: 'Empieza desde cero', h: '' },
+  { n: 'Discurso general', d: 'Apertura, tres puntos y cierre', h: sec('Apertura', 'Saludo y un gancho: una pregunta, una historia o un dato que atrape.') + sec('Punto 1', 'Idea central y un ejemplo.') + sec('Punto 2', 'Idea central y un ejemplo.') + sec('Punto 3', 'Idea central y un ejemplo.') + sec('Cierre', 'Resume el mensaje y termina con un llamado a la acción.') },
+  { n: 'Mensaje espiritual', d: 'Saludo, experiencia, principio y testimonio', h: sec('Saludo e introducción', 'Agradece, preséntate y anuncia el tema.') + sec('Experiencia o historia', 'Un relato personal o un ejemplo que ilustre el mensaje.') + sec('Principio o enseñanza', 'La idea central, con las citas o escrituras que la respaldan.') + sec('Aplicación', 'Cómo puede ponerse en práctica esta semana.') + sec('Testimonio y cierre', 'Tu convicción personal y una despedida.') },
+  { n: 'Conferencia académica', d: 'Introducción, marco teórico, desarrollo y conclusiones', h: sec('Introducción y objetivo', 'Contexto, problema y propósito de la exposición.') + sec('Marco teórico', 'Conceptos y autores clave (usa la cita con referencia).') + sec('Desarrollo', 'Argumentos o metodología, en orden lógico.') + sec('Resultados y discusión', 'Hallazgos principales y su significado.') + sec('Conclusiones', 'Ideas finales y líneas futuras.') },
+  { n: 'Clase o exposición', d: 'Objetivo, activación, contenido, práctica y cierre', h: sec('Objetivo de aprendizaje', 'Qué podrá hacer el público al terminar.') + sec('Activación', 'Pregunta o actividad breve para conectar con lo que ya saben.') + sec('Contenido', 'Los conceptos principales, de lo simple a lo complejo.') + sec('Práctica', 'Ejercicio, caso o dinámica.') + sec('Cierre y evaluación', 'Síntesis, preguntas y tarea.') },
+  { n: 'Bienvenida breve', d: 'Saludo, propósito y agradecimientos', h: sec('Saludo', 'Una frase cálida de bienvenida.') + sec('Propósito', 'Por qué estamos aquí hoy.') + sec('Agradecimientos', 'A quién y por qué.') + sec('Cierre', 'Invitación a disfrutar el encuentro.') },
+  { n: 'Agradecimiento', d: 'Apertura, a quiénes agradecer, anécdota y cierre', h: sec('Apertura', 'Cómo te sientes y qué quieres decir.') + sec('A quiénes agradecer', 'Personas e instituciones, con un detalle concreto de cada una.') + sec('Anécdota', 'Un recuerdo breve que ilustre tu gratitud.') + sec('Cierre', 'Una frase final que quede en la memoria.') },
+  { n: 'Brindis o celebración', d: 'Apertura, homenaje, recuerdo y deseos', h: sec('Apertura', 'Saludo y motivo de la celebración.') + sec('Homenaje', 'Quién o qué celebramos y por qué es especial.') + sec('Recuerdo', 'Una anécdota breve y cálida.') + sec('Deseos y brindis', 'Buenos deseos y la frase para levantar la copa.') }
+];
+async function templateModal() {
+  const m = modal(`<h3>Nuevo discurso</h3><p class="muted" style="margin-bottom:14px">Empieza en blanco o con una estructura lista para completar.</p><div class="qlist" id="tl">${TPL.map((t, i) => `<button class="tpl" data-i="${i}"><b>${esc(t.n)}</b><span>${esc(t.d)}</span></button>`).join('')}</div><div id="mt"></div>`, 'wide');
+  let mine = [];
+  m.addEventListener('click', async e => {
+    const b = e.target.closest('.tpl[data-i]'), c = e.target.closest('.tpl[data-t]'), x = e.target.closest('[data-dt]');
+    if (b) { m.close(); createSpeech({ contenido: TPL[+b.dataset.i].h }); }
+    else if (c) { const t = mine.find(y => y.id === c.dataset.t); m.close(); createSpeech({ contenido: t?.contenido || '' }); }
+    else if (x && await confirmDlg('¿Eliminar plantilla?', 'Se borrará de tus plantillas (no afecta a los discursos ya creados).')) { try { await deleteDoc(doc(tcol(), x.dataset.dt)); mine = mine.filter(y => y.id !== x.dataset.dt); x.closest('.tpl-row').remove(); } catch (er) { toast(authMsg(er.code), 'err'); } }
+  });
+  try {
+    const sn = await getDocs(query(tcol(), orderBy('creadoEn', 'desc'))); mine = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (mine.length) $('#mt', m).innerHTML = `<p class="muted sm" style="margin:6px 0 8px">Mis plantillas</p><div class="qlist">${mine.map(t => `<div class="tpl-row"><button class="tpl" data-t="${t.id}"><b>${esc(t.nombre)}</b><span>Plantilla propia</span></button><button class="icon" data-dt="${t.id}" title="Eliminar plantilla">${ic.trash}</button></div>`).join('')}</div>`;
+  } catch (e) { }
+}
+function saveTemplateModal(d) {
+  const m = modal(`<h3>Guardar como plantilla</h3><p class="muted sm" style="margin-bottom:12px">Se guardará el texto sin las referencias numeradas.</p><form id="tf"><label>Nombre de la plantilla<input name="n" required maxlength="80" value="${esc(d.titulo)}"></label><div class="actions"><button type="button" class="btn ghost" data-c>Cancelar</button><button class="btn gold">Guardar</button></div></form>`);
+  m.querySelector('[data-c]').onclick = m.close;
+  m.querySelector('#tf').onsubmit = async e => {
+    e.preventDefault(); const dd = new DOMParser().parseFromString('<body>' + d.contenido, 'text/html'); dd.querySelectorAll('sup.fn').forEach(n => n.remove());
+    try { await setDoc(doc(tcol()), { nombre: e.target.n.value.trim(), contenido: sanitize(dd.body.innerHTML), creadoEn: serverTimestamp() }); m.close(); toast('Plantilla guardada'); } catch (er) { toast(authMsg(er.code), 'err'); }
+  };
+}
+
+/* ---- Banco de citas ---- */
+function quoteForm(q, after) {
+  const m = modal(`<h3>${q ? 'Editar cita' : 'Nueva cita'}</h3><form id="qf"><label>Texto de la cita<textarea name="t" required maxlength="1500">${esc(q?.texto)}</textarea></label><label>Fuente (aparecerá en Referencias)<input name="f" maxlength="300" value="${esc(q?.fuente)}" placeholder="Autor, obra, capítulo o versículo, página"></label><div class="actions"><button type="button" class="btn ghost" data-c>Cancelar</button><button class="btn gold">Guardar</button></div></form>`);
+  m.querySelector('[data-c]').onclick = m.close;
+  m.querySelector('#qf').onsubmit = async e => {
+    e.preventDefault(); const f = e.target, data = { texto: f.t.value.trim(), fuente: f.f.value.trim() };
+    try { await setDoc(q ? doc(qcol(), q.id) : doc(qcol()), q ? data : { ...data, creadoEn: serverTimestamp() }, { merge: true }); m.close(); toast('Cita guardada'); after?.(data); } catch (er) { toast(authMsg(er.code), 'err'); }
+  };
+}
+function renderQuotes() {
+  $('#main').innerHTML = `<section class="page"><div class="head"><div><h2 class="serif">Banco de citas</h2><p class="muted">Frases, versículos y fuentes que puedes insertar en tus discursos con su referencia.</p></div><button class="btn gold" id="nq">${ic.plus} Nueva cita</button></div>
+  <div class="toolbar"><div class="search">${ic.search}<input id="qq" placeholder="Buscar por texto o fuente…"></div></div><div class="grid" id="qg"></div></section>`;
+  $('#nq').onclick = () => quoteForm(); $('#qq').oninput = paintQuotes;
+  $('#qg').onclick = async e => {
+    const c = e.target.closest('.qcard'), a = e.target.closest('[data-a]')?.dataset.a; if (!c || !a) return; const q = S.quotes.find(x => x.id === c.dataset.id);
+    if (a === 'edit') quoteForm(q);
+    else if (a === 'del' && await confirmDlg('¿Eliminar cita?', 'Se borrará del banco (no de los discursos donde ya la usaste).')) { try { await deleteDoc(doc(qcol(), q.id)); toast('Cita eliminada'); } catch (er) { toast(authMsg(er.code), 'err'); } }
+  };
+  paintQuotes();
+}
+function paintQuotes() {
+  if (S.view !== 'quotes' || !$('#qg')) return; const q = ($('#qq')?.value || '').toLowerCase();
+  const l = S.quotes.filter(x => !q || ((x.texto || '') + ' ' + (x.fuente || '')).toLowerCase().includes(q));
+  $('#qg').innerHTML = l.length ? l.map(x => `<article class="card qcard" data-id="${x.id}" style="cursor:default"><blockquote class="qt">“${esc(x.texto)}”</blockquote><div class="meta"><span>${esc(x.fuente || 'Sin fuente')}</span></div><div class="card-act"><span class="grow"></span><button class="icon" data-a="edit" title="Editar">${ic.edit}</button><button class="icon" data-a="del" title="Eliminar">${ic.trash}</button></div></article>`).join('')
+    : `<div class="empty"><h3 class="serif">${S.quotes.length ? 'Sin resultados' : 'Tu banco de citas está vacío'}</h3><p>${S.quotes.length ? 'Prueba con otra búsqueda.' : 'Guarda frases y versículos con su fuente para insertarlos en un clic.'}</p>${S.quotes.length ? '' : `<button class="btn gold" onclick="document.getElementById('nq').click()">${ic.plus} Añadir primera cita</button>`}</div>`;
+}
+function quotePicker() {
+  const m = modal(`<h3>Insertar cita</h3><div class="search" style="margin-bottom:12px">${ic.search}<input id="qs" placeholder="Buscar…"></div><div class="qlist" id="ql"></div><div class="actions"><button class="btn ghost sm" data-n>${ic.plus} Nueva cita</button><button class="btn ghost" data-c>Cerrar</button></div>`, 'wide');
+  const paint = () => {
+    const s = $('#qs', m).value.toLowerCase(), l = S.quotes.filter(x => !s || ((x.texto || '') + ' ' + (x.fuente || '')).toLowerCase().includes(s));
+    $('#ql', m).innerHTML = l.length ? l.map(x => `<button class="tpl" data-id="${x.id}"><b>“${esc((x.texto || '').slice(0, 150))}${(x.texto || '').length > 150 ? '…' : ''}”</b><span>${esc(x.fuente || 'Sin fuente')}</span></button>`).join('') : '<p class="muted sm">No hay citas que coincidan. Crea una con «Nueva cita».</p>';
+  };
+  paint(); $('#qs', m).oninput = paint; $('#qs', m).focus();
+  m.querySelector('[data-c]').onclick = m.close;
+  m.querySelector('[data-n]').onclick = () => { m.close(); quoteForm(null, d => S.cur?.insertQuote?.(d)); };
+  m.addEventListener('click', e => { const b = e.target.closest('.tpl[data-id]'); if (!b) return; const q = S.quotes.find(x => x.id === b.dataset.id); m.close(); if (q) S.cur?.insertQuote?.(q); });
+}
+
+/* ---- Exportar a Word ---- */
+const DOCX_URL = 'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js';
+/* DOCX START */
+function buildDocx(d, lib) {
+  const { Document, TextRun, Paragraph, HeadingLevel } = lib, kids = [];
+  const body = new DOMParser().parseFromString('<body>' + sanitize(d.contenido), 'text/html').body;
+  const runs = (node, st = {}) => {
+    const out = [];
+    node.childNodes.forEach(n => {
+      if (n.nodeType === 3) { const t = n.textContent.replace(/​/g, '').replace(/[\r\n]+/g, ' '); if (t) out.push(new TextRun({ text: t, ...st })); }
+      else if (n.nodeType === 1) {
+        const t = n.tagName;
+        if (t === 'BR') out.push(new TextRun({ break: 1 }));
+        else if (t === 'SUP' && n.classList.contains('fn')) out.push(new TextRun({ text: n.textContent, superScript: true, ...st }));
+        else {
+          const s = { ...st }; if (t === 'B' || t === 'STRONG') s.bold = true; if (t === 'I' || t === 'EM') s.italics = true; if (t === 'U') s.underline = {};
+          const bg = n.style && n.style.backgroundColor; if (bg && !/transparent|rgba\(0,\s*0,\s*0,\s*0\)/.test(bg)) s.highlight = 'yellow';
+          out.push(...runs(n, s));
+        }
+      }
+    });
+    return out;
+  };
+  const block = n => {
+    if (n.nodeType === 3) { const t = n.textContent.trim(); if (t) kids.push(new Paragraph({ spacing: { after: 160 }, children: [new TextRun(t)] })); return; }
+    if (n.nodeType !== 1) return; const t = n.tagName;
+    if (t === 'H2') kids.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 280, after: 120 }, children: runs(n) }));
+    else if (t === 'BLOCKQUOTE') { if (n.textContent.trim()) kids.push(new Paragraph({ indent: { left: 720 }, spacing: { after: 160 }, children: runs(n, { italics: true }) })); }
+    else if (t === 'UL' || t === 'OL') [...n.children].filter(li => li.tagName === 'LI').forEach((li, i) => kids.push(new Paragraph(t === 'UL' ? { bullet: { level: 0 }, spacing: { after: 80 }, children: runs(li) } : { indent: { left: 720, hanging: 360 }, spacing: { after: 80 }, children: [new TextRun(`${i + 1}. `), ...runs(li)] })));
+    else if (t === 'DIV' && [...n.children].some(c => /^(P|DIV|H2|UL|OL|BLOCKQUOTE)$/.test(c.tagName))) n.childNodes.forEach(block);
+    else if (n.textContent.trim()) kids.push(new Paragraph({ spacing: { after: 160 }, children: runs(n) }));
+  };
+  kids.push(new Paragraph({ heading: HeadingLevel.TITLE, spacing: { after: 300 }, children: [new TextRun(d.titulo || 'Discurso')] }));
+  body.childNodes.forEach(block);
+  const refs = d.referencias || [];
+  if (refs.some(r => r && r.trim())) {
+    kids.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 360, after: 120 }, children: [new TextRun('Referencias')] }));
+    refs.forEach((r, i) => { if (r && r.trim()) kids.push(new Paragraph({ indent: { left: 360, hanging: 360 }, spacing: { after: 80 }, children: [new TextRun({ text: `${i + 1}. ${r.trim()}`, size: 20 })] })); });
+  }
+  return new Document({ creator: 'Elocuencia', title: d.titulo || 'Discurso', styles: { default: { document: { run: { font: 'Georgia', size: 24 }, paragraph: { spacing: { line: 340 } } } } }, sections: [{ children: kids }] });
+}
+/* DOCX END */
+async function exportDocx(d, name) {
+  if (!window.docx) await loadScript(DOCX_URL);
+  const blob = await window.docx.Packer.toBlob(buildDocx(d, window.docx));
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '.docx'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
 /* ====================== 7. EDITOR ====================== */
 function renderEditor(id) {
   const sp = S.speeches.find(x => x.id === id) || { id, titulo: '', contenido: '', etiquetas: [] };
-  S.cur = { id, refs: [...(sp.referencias || [])] }; S.dirty = false;
+  S.cur = { id, refs: [...(sp.referencias || [])], share: sp.compartido || '', base: sp.contenido || '', baseT: sp.titulo || '', baseR: sp.referencias || [], verT: Date.now(), verC: sp.contenido || '' }; S.dirty = false;
   $('#main').innerHTML = `<section class="page narrow"><div class="ed-top"><button class="btn ghost sm" id="bk">${ic.back} Biblioteca</button><span class="grow"></span>
-  <span id="st" class="muted sm">Guardado</span><button class="btn sm" id="ex">${ic.download} Exportar</button><button class="btn gold sm" id="rd">${ic.play} Leer</button></div>
+  <span id="st" class="muted sm">Guardado</span><button class="icon" id="hs" title="Historial de versiones" aria-label="Historial de versiones">${ic.clock}</button><button class="icon" id="shr" title="Compartir enlace de solo lectura" aria-label="Compartir">${ic.share}</button><button class="btn sm" id="ex">${ic.download} Exportar</button><button class="btn gold sm" id="rd">${ic.play} Leer</button></div>
   <input id="ti" class="ed-title serif" placeholder="Título del discurso" value="${esc(sp.titulo)}" aria-label="Título">
   <input id="tgs" class="ed-tags" placeholder="Etiquetas separadas por comas (ej. conferencia, domingo)" value="${esc((sp.etiquetas || []).join(', '))}" aria-label="Etiquetas">
   <div class="ed-meta"><label>Fecha del discurso<input type="date" id="fe" value="${esc(sp.fecha || '')}"></label><label>Duración objetivo (min)<input type="number" id="du" min="0" max="180" placeholder="ej. 10" value="${sp.duracion || ''}"></label></div>
-  <div class="fmt"><button data-c="bold" title="Negrita"><b>B</b></button><button data-c="italic" title="Cursiva"><i>I</i></button><button data-c="h2" title="Subtítulo">H</button><button data-c="ul" title="Lista">•</button><button data-c="quote" title="Cita">❝</button><button data-c="p" title="Párrafo normal">¶</button><button data-c="hl" title="Resaltar texto"><span style="background:var(--gold);color:#1a1407;padding:0 6px;border-radius:4px">A</span></button><button data-c="fn" title="Insertar referencia (pie de página)">A<sup>1</sup></button></div>
+  <div class="fmt"><button data-c="bold" title="Negrita"><b>B</b></button><button data-c="italic" title="Cursiva"><i>I</i></button><button data-c="h2" title="Subtítulo">H</button><button data-c="ul" title="Lista">•</button><button data-c="quote" title="Cita">❝</button><button data-c="p" title="Párrafo normal">¶</button><button data-c="hl" title="Resaltar texto"><span style="background:var(--gold);color:#1a1407;padding:0 6px;border-radius:4px">A</span></button><button data-c="fn" title="Insertar referencia (pie de página)">A<sup>1</sup></button><button data-c="qt" title="Insertar cita del banco" aria-label="Insertar cita del banco">${ic.quote}</button></div>
   <div id="ed" class="ed" contenteditable="true" data-ph="Comienza a escribir tu discurso…" spellcheck="true">${sanitize(sp.contenido)}</div>
   <div class="refs" id="refs"></div><div class="ed-foot"><span id="wc"></span></div></section>`;
   const ed = $('#ed'); document.execCommand('defaultParagraphSeparator', false, 'p');
@@ -539,9 +766,18 @@ function renderEditor(id) {
     S.cur.refs.splice(i, 1); paintRefs(); count(); scheduleSave();
   };
   paintRefs();
+  S.cur.insertQuote = q => {
+    ed.focus(); const sl = getSelection(), r = S.cur.range || (() => { const x = document.createRange(); x.selectNodeContents(ed); x.collapse(false); return x; })();
+    sl.removeAllRanges(); sl.addRange(r); let n = 0;
+    if (q.fuente && q.fuente.trim()) { S.cur.refs.push(q.fuente.trim()); n = S.cur.refs.length; }
+    document.execCommand('insertHTML', false, `<blockquote>${esc(q.texto)}${n ? `<sup class="fn" contenteditable="false">${n}</sup>` : ''}</blockquote><p><br></p>`);
+    paintRefs(); count(); scheduleSave();
+  };
   const cmds = { bold: ['bold'], italic: ['italic'], h2: ['formatBlock', 'h2'], ul: ['insertUnorderedList'], quote: ['formatBlock', 'blockquote'], p: ['formatBlock', 'p'] };
   $$('.fmt button').forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => {
-    const k = b.dataset.c; if (k === 'fn') return addRef(true); ed.focus();
+    const k = b.dataset.c; if (k === 'fn') return addRef(true);
+    if (k === 'qt') { const sl = getSelection(); S.cur.range = sl.rangeCount && ed.contains(sl.anchorNode) ? sl.getRangeAt(0).cloneRange() : null; return quotePicker(); }
+    ed.focus();
     if (k === 'hl') { document.execCommand('styleWithCSS', false, true); const cur = document.queryCommandValue('hiliteColor'), on = cur && !/^(rgba\(0, 0, 0, 0\)|transparent)$/.test(cur); document.execCommand('hiliteColor', false, on ? 'transparent' : 'rgba(214,178,110,.45)'); document.execCommand('styleWithCSS', false, false); }
     else { const [c, v] = cmds[k]; document.execCommand(c, false, v ?? null); }
     scheduleSave();
@@ -551,7 +787,7 @@ function renderEditor(id) {
   $('#ti').oninput = scheduleSave; $('#tgs').oninput = scheduleSave; $('#fe').oninput = scheduleSave; $('#du').oninput = () => { count(); scheduleSave(); }; count();
   $('#bk').onclick = () => go('library');
   $('#rd').onclick = async () => { await saveNow(); openReader(readEditor()); };
-  $('#ex').onclick = exportModal;
+  $('#ex').onclick = exportModal; $('#hs').onclick = historyModal; $('#shr').onclick = shareModal;
   if (!sp.titulo && !sp.contenido) $('#ti').focus();
 }
 const readEditor = () => ({ id: S.cur.id, titulo: $('#ti').value.trim(), contenido: sanitize($('#ed').innerHTML), etiquetas: $('#tgs').value.split(',').map(t => t.trim()).filter(Boolean).slice(0, 8), referencias: S.cur.refs.map(t => (t || '').trim()), fecha: $('#fe').value || '', duracion: +$('#du').value || 0 });
@@ -559,7 +795,7 @@ const setStatus = (t, c) => { const s = $('#st'); if (s) { s.textContent = t; s.
 function scheduleSave() { S.dirty = true; setStatus('Guardando…'); clearTimeout(S.t); S.t = setTimeout(saveNow, 800); }
 async function saveNow() {
   if (!S.dirty || !S.cur || !$('#ed')) return; clearTimeout(S.t); S.dirty = false; const d = readEditor();
-  try { await updateDoc(doc(col(), d.id), { titulo: d.titulo, contenido: d.contenido, etiquetas: d.etiquetas, referencias: d.referencias, fecha: d.fecha, duracion: d.duracion, actualizadoEn: serverTimestamp() }); if (!S.dirty) setStatus('Guardado'); }
+  try { await updateDoc(doc(col(), d.id), { titulo: d.titulo, contenido: d.contenido, etiquetas: d.etiquetas, referencias: d.referencias, fecha: d.fecha, duracion: d.duracion, actualizadoEn: serverTimestamp() }); syncShare(d); maybeSnapshot(d); if (!S.dirty) setStatus('Guardado'); }
   catch (e) { S.dirty = true; setStatus('Error al guardar', 'err'); }
 }
 function flushSave() { if (S.view === 'editor' && S.dirty) saveNow(); }
@@ -567,10 +803,12 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) flush
 window.addEventListener('beforeunload', flushSave);
 function exportModal() {
   const d = readEditor(), text = htmlToText(d.contenido, true) + refsTxt(d.referencias), name = (d.titulo || 'discurso').toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi, '-').replace(/^-|-$/g, '') || 'discurso';
-  const m = modal(`<h3>Exportar</h3><div class="actions col"><button class="btn" data-t>${ic.download} Texto (.txt)</button><button class="btn" data-p>${ic.download} PDF / Imprimir</button><button class="btn ghost danger" data-d style="color:var(--danger)">${ic.trash} Eliminar discurso</button></div>`);
+  const m = modal(`<h3>Exportar</h3><div class="actions col"><button class="btn gold" data-w>${ic.download} Word (.docx)</button><button class="btn" data-t>${ic.download} Texto (.txt)</button><button class="btn" data-p>${ic.download} PDF / Imprimir</button><button class="btn" data-tp>${ic.tpl} Guardar como plantilla</button><button class="btn ghost danger" data-d style="color:var(--danger)">${ic.trash} Eliminar discurso</button></div>`);
   m.querySelector('[data-t]').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`${d.titulo}\n\n${text}\n`], { type: 'text/plain;charset=utf-8' })); a.download = name + '.txt'; a.click(); URL.revokeObjectURL(a.href); m.close(); };
   m.querySelector('[data-p]').onclick = () => { m.close(); $('#print').innerHTML = `<h1>${esc(d.titulo)}</h1>${d.contenido}${refsHtml(d.referencias, 'pr-refs')}`; document.body.classList.add('printing'); window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true }); setTimeout(() => window.print(), 150); };
-  m.querySelector('[data-d]').onclick = async () => { m.close(); if (await confirmDlg('¿Eliminar discurso?', 'Se borrará de forma permanente.')) { S.dirty = false; await deleteDoc(doc(col(), d.id)); toast('Discurso eliminado'); go('library'); } };
+  m.querySelector('[data-w]').onclick = async () => { m.close(); try { toast('Generando Word…'); await exportDocx(d, name); } catch (er) { console.error(er); toast('No se pudo generar el archivo Word.', 'err'); } };
+  m.querySelector('[data-tp]').onclick = () => { m.close(); saveTemplateModal(d); };
+  m.querySelector('[data-d]').onclick = async () => { m.close(); if (await confirmDlg('¿Eliminar discurso?', 'Se borrará de forma permanente, junto con su historial y su enlace compartido.')) { S.dirty = false; try { await removeSpeech(d.id); toast('Discurso eliminado'); go('library'); } catch (er) { toast(authMsg(er.code), 'err'); } } };
 }
 
 /* ====================== 8. MODO LECTURA / TELEPROMPTER ====================== */
@@ -658,8 +896,12 @@ function renderAdmin() {
     }
     if (a === 'del' && await confirmDlg('¿Eliminar usuario?', `Se borrarán "${u.nombre}" y todos sus discursos. Esta acción no se puede deshacer.`)) {
       try {
-        const sps = await getDocs(collection(db, 'users', u.id, 'speeches')); const bt = writeBatch(db);
-        sps.forEach(d => bt.delete(d.ref)); bt.delete(doc(db, 'users', u.id)); await bt.commit(); toast('Usuario eliminado');
+        const refs = [], sps = await getDocs(collection(db, 'users', u.id, 'speeches'));
+        for (const d of sps.docs) { (await getDocs(collection(d.ref, 'versions'))).forEach(v => refs.push(v.ref)); if (d.data().compartido) refs.push(doc(db, 'shared', d.data().compartido)); refs.push(d.ref); }
+        for (const c of ['quotes', 'templates']) (await getDocs(collection(db, 'users', u.id, c))).forEach(x => refs.push(x.ref));
+        refs.push(doc(db, 'users', u.id));
+        for (let i = 0; i < refs.length; i += 400) { const bt = writeBatch(db); refs.slice(i, i + 400).forEach(r => bt.delete(r)); await bt.commit(); }
+        toast('Usuario eliminado');
       } catch (er) { toast(authMsg(er.code), 'err'); }
     }
   };
