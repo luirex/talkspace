@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0c0c0f">
-<title>Elocuencia — Tus discursos</title>
+<title>Elevate — Tus discursos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
 /* ============ TEMAS ============ */
 :root{--ease:cubic-bezier(.2,.7,.2,1);--r:14px}
@@ -51,8 +51,8 @@ small.hint{display:block;margin:-8px 0 14px;font-size:12px;color:var(--muted)}
 .auth{min-height:100vh;display:grid;place-items:center;padding:24px}
 .auth-card{width:100%;max-width:410px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:38px 32px;box-shadow:var(--sh);animation:rise .6s var(--ease)}
 .auth-card h1{font-size:30px;margin:14px 0 4px}.auth-card p{margin-bottom:26px}
-.logo{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font:600 26px 'Playfair Display',serif;color:var(--gold-i);background:linear-gradient(135deg,var(--gold),color-mix(in srgb,var(--gold) 55%,#000));box-shadow:0 8px 22px color-mix(in srgb,var(--gold) 30%,transparent)}
-.logo.sm{width:34px;height:34px;border-radius:10px;font-size:18px}
+.logo{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font:400 40px/1 'Great Vibes','Playfair Display',cursive;padding-top:5px;color:var(--gold-i);background:linear-gradient(135deg,var(--gold),color-mix(in srgb,var(--gold) 55%,#000));box-shadow:0 8px 22px color-mix(in srgb,var(--gold) 30%,transparent)}
+.logo.sm{width:34px;height:34px;border-radius:10px;font-size:27px;padding-top:3px}
 .notice{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--muted);margin-bottom:18px}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
@@ -292,7 +292,7 @@ const SHARE = (location.hash.match(/^#\/v\/([A-Za-z0-9]{10,64})$/) || [])[1];
 const authShell = inner => `<div class="auth"><div class="auth-card"><div class="logo">E</div>${inner}</div></div>`;
 
 function showNotConfigured() {
-  $('#root').innerHTML = authShell(`<h1 class="serif">Elocuencia</h1><div class="notice">Falta conectar Firebase. Abre <b>index.html</b>, pega tu <b>firebaseConfig</b> en la sección 1 del script y recarga. Sigue los pasos del archivo <b>LEEME.md</b>.</div>`);
+  $('#root').innerHTML = authShell(`<h1 class="serif">Elevate</h1><div class="notice">Falta conectar Firebase. Abre <b>index.html</b>, pega tu <b>firebaseConfig</b> en la sección 1 del script y recarga. Sigue los pasos del archivo <b>LEEME.md</b>.</div>`);
 }
 function recoverModal() {
   const lu = ($('#lu')?.value || '').trim();
@@ -312,7 +312,7 @@ async function showLogin() {
   let init = true;
   try { init = (await getDoc(doc(db, 'config', 'setup'))).exists(); } catch (e) { }
   if (!init) return showSetup();
-  $('#root').innerHTML = authShell(`<h1 class="serif">Elocuencia</h1><p class="muted">Escribe, ensaya y pronuncia tus discursos.</p>
+  $('#root').innerHTML = authShell(`<h1 class="serif">Elevate</h1><p class="muted">Escribe, ensaya y pronuncia tus discursos.</p>
   <form id="lf"><label>Usuario o correo<input id="lu" autocomplete="username" required autofocus></label>
   <label>Contraseña<input id="lp" type="password" autocomplete="current-password" required></label>
   <div class="opts"><label class="chk"><input type="checkbox" id="sh"> Mostrar contraseña</label><button type="button" class="lnk" id="fp">¿Olvidaste tu contraseña?</button></div>
@@ -372,7 +372,7 @@ else onAuthStateChanged(auth, async u => {
 /* ====================== 5. ESTRUCTURA DE LA APP ====================== */
 function startApp() {
   const p = S.profile, admin = p.rol === 'admin';
-  $('#root').innerHTML = `<header class="top"><div class="wrap row"><div class="brand"><span class="logo sm">E</span><span class="hide-s">Elocuencia</span></div>
+  $('#root').innerHTML = `<header class="top"><div class="wrap row"><div class="brand"><span class="logo sm">E</span><span class="hide-s">Elevate</span></div>
   <nav><button data-v="library">Biblioteca</button><button data-v="quotes">Citas</button>${admin ? '<button data-v="admin">Administración</button>' : ''}</nav><div class="grow"></div>
   <button class="icon" id="th" aria-label="Cambiar tema"></button>
   <button class="user" id="um"><span class="av">${esc(p.nombre.trim()[0] || '?').toUpperCase()}</span><span class="hide-s sm">${esc(p.nombre.split(' ')[0])}</span></button></div></header><main id="main" class="wrap"></main>`;
@@ -517,8 +517,8 @@ function backupModal() {
   const m = modal(`<h3>Importar y respaldo</h3><p class="muted">Importa discursos desde Word (.docx), PDF o texto, o gestiona un respaldo completo. Lo importado se añade, no reemplaza.</p><div class="actions col"><button class="btn" data-e>${ic.download} Exportar respaldo (.json)</button><label class="btn gold" style="margin:0;cursor:pointer">${ic.plus} Importar Word, PDF o TXT<input type="file" data-doc multiple accept=".docx,.pdf,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" style="display:none"></label><label class="btn" style="margin:0;cursor:pointer;color:var(--text)">Importar respaldo (.json)<input type="file" data-json accept=".json,application/json" style="display:none"></label></div>`);
   m.querySelector('input[data-doc]').onchange = async e => { const fs = [...e.target.files]; m.close(); await importDocs(fs); };
   m.querySelector('[data-e]').onclick = () => {
-    const data = { app: 'elocuencia', version: 1, exportado: new Date().toISOString(), discursos: S.speeches.map(s => ({ titulo: s.titulo || '', contenido: s.contenido || '', etiquetas: s.etiquetas || [], favorito: !!s.favorito, referencias: s.referencias || [], fecha: s.fecha || '', duracion: s.duracion || 0 })) };
-    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' })); a.download = `elocuencia-respaldo-${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(a.href); m.close(); toast('Respaldo exportado');
+    const data = { app: 'elevate', version: 1, exportado: new Date().toISOString(), discursos: S.speeches.map(s => ({ titulo: s.titulo || '', contenido: s.contenido || '', etiquetas: s.etiquetas || [], favorito: !!s.favorito, referencias: s.referencias || [], fecha: s.fecha || '', duracion: s.duracion || 0 })) };
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' })); a.download = `elevate-respaldo-${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(a.href); m.close(); toast('Respaldo exportado');
   };
   m.querySelector('input[data-json]').onchange = async e => {
     try {
@@ -599,10 +599,10 @@ async function showShared(token) {
   $('#root').innerHTML = `<div class="auth"><p class="muted">Cargando…</p></div>`;
   let x;
   try { const s = await getDoc(doc(db, 'shared', token)); if (!s.exists()) throw 0; x = s.data(); }
-  catch (e) { $('#root').innerHTML = authShell(`<h1 class="serif">Enlace no disponible</h1><p class="muted">Este discurso no existe o su autor dejó de compartirlo.</p><a class="btn gold block" href="${location.pathname}">Abrir Elocuencia</a>`); return; }
-  document.title = (x.titulo || 'Discurso') + ' — Elocuencia';
+  catch (e) { $('#root').innerHTML = authShell(`<h1 class="serif">Enlace no disponible</h1><p class="muted">Este discurso no existe o su autor dejó de compartirlo.</p><a class="btn gold block" href="${location.pathname}">Abrir Elevate</a>`); return; }
+  document.title = (x.titulo || 'Discurso') + ' — Elevate';
   const w = words(htmlToText(x.contenido));
-  $('#root').innerHTML = `<header class="top"><div class="wrap row"><div class="brand"><span class="logo sm">E</span><span class="hide-s">Elocuencia</span></div><div class="grow"></div><button class="icon" id="th" aria-label="Cambiar tema"></button><button class="btn sm" id="pp">${ic.download} PDF</button><button class="btn gold sm" id="pr">${ic.play} Leer</button></div></header>
+  $('#root').innerHTML = `<header class="top"><div class="wrap row"><div class="brand"><span class="logo sm">E</span><span class="hide-s">Elevate</span></div><div class="grow"></div><button class="icon" id="th" aria-label="Cambiar tema"></button><button class="btn sm" id="pp">${ic.download} PDF</button><button class="btn gold sm" id="pr">${ic.play} Leer</button></div></header>
   <main class="wrap"><article class="page narrow"><p class="muted sm">Solo lectura</p><h1 class="serif sh-title">${esc(x.titulo || 'Sin título')}</h1><p class="muted sm">${w} palabras · ~${mins(w)} min de lectura</p><div class="ed ro">${sanitize(x.contenido)}</div>${refsHtml(x.referencias, 'refs-ro')}</article></main>`;
   const paintTheme = () => $('#th').innerHTML = document.documentElement.dataset.theme === 'dark' ? ic.sun : ic.moon;
   paintTheme(); $('#th').onclick = () => { setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); paintTheme(); };
@@ -722,7 +722,7 @@ function buildDocx(d, lib) {
     kids.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 360, after: 120 }, children: [new TextRun('Referencias')] }));
     refs.forEach((r, i) => { if (r && r.trim()) kids.push(new Paragraph({ indent: { left: 360, hanging: 360 }, spacing: { after: 80 }, children: [new TextRun({ text: `${i + 1}. ${r.trim()}`, size: 20 })] })); });
   }
-  return new Document({ creator: 'Elocuencia', title: d.titulo || 'Discurso', styles: { default: { document: { run: { font: 'Georgia', size: 24 }, paragraph: { spacing: { line: 340 } } } } }, sections: [{ children: kids }] });
+  return new Document({ creator: 'Elevate', title: d.titulo || 'Discurso', styles: { default: { document: { run: { font: 'Georgia', size: 24 }, paragraph: { spacing: { line: 340 } } } } }, sections: [{ children: kids }] });
 }
 /* DOCX END */
 async function exportDocx(d, name) {
